@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+    <a th:href="@{home}"> <button th:href="@{/home}"  th:value="home">home</button></a>
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>num samosval</th>
+                <th>driver samosval</th>
+                <th>type samosval</th>
+                <th>reise</th>
+                <th>excovator</th>
+                <th>driver excovator</th>
+                <th>time Of Come Loading</th>
+                <th>time Of Begin Loading</th>
+                <th>time Of Loading</th>
+                <th>distance</th>
+                <th>weight Fact</th>
+                <th>weight Norm</th>
+                <th>type Of Work</th>
+                <th>place To Unloading</th>
+                <th>time Of Begin Unloading</th>
+                <th>time Of Unloading</th>
+                <th>gas For Begin Loading</th>
+                <th>gas For Begin Unloading</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr th:each="object: ${objects}">
+            <td th:text="${object.id}">id</td>
+            <td th:text="${object.numSamosval}">numSamosval</td>
+            <td th:text="${object.nameDriverSamosval}">nameDriverSamosval</td>
+            <td th:text="${object.typeSamosval}">typeSamosval</td>
+            <td th:text="${object.reise}">reise</td>
+            <td th:text="${object.numEx}">numEx</td>
+            <td th:text="${object.nameEx}">nameEx</td>
+            <td th:text="${object.timeOfComeLoading}">timeOfComeLoading</td>
+            <td th:text="${object.timeOfBeginLoading}">timeOfBeginLoading</td>
+            <td th:text="${object.timeOfLoading}">timeOfLoading</td>
+            <td th:text="${object.distance}">distance</td>
+            <td th:text="${object.weightFact}">weightFact</td>
+            <td th:text="${object.weightNorm}">weightNorm</td>
+            <td th:text="${object.typeOfWork}">typeOfWork</td>
+            <td th:text="${object.placeToUnloading}">placeToUnloading</td>
+            <td th:text="${object.timeOfBeginUnloading}">timeOfBeginUnloading</td>
+            <td th:text="${object.timeOfUnloading}">timeOfUnloading</td>
+            <td th:text="${object.gasForBeginLoading}">gasForBeginLoading</td>
+            <td th:text="${object.gasForBeginUnloading}">gasForBeginUnloading</td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

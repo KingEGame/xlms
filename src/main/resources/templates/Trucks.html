@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+<a th:href="@{home}"> <button th:href="@{/home}"  th:value="home">home</button></a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>model</th>
+                <th>carring capacity</th>
+                <th>volume</th>
+                <th>speed</th>
+                <th>carring capaciti optimal</th>
+            </tr>
+        </thead>
+        <tbody>
+             <tr th:each="truck: ${trucks}">
+                <td th:text="${truck.id}">id</td>
+                <td th:text="${truck.carrying_capacity}">carrying_capacity</td>
+                <td th:text="${truck.carring_capasity_opt}">carring_capasity_opt</td>
+                <td th:text="${truck.volume}">volume</td>
+                <td th:text="${truck.max_speed}">max_speed</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

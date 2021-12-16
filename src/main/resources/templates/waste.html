@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+    <input type="submit" th:method="get" value="home">
+
+    <select th:each="truck: ${truks}">
+        <option th:each="${truck.name}">name</option>
+    </select>
+
+    <table>
+        <thead>
+            <tr>
+                <td>optimal</td>
+                <td>hour_of_work</td>
+                <td>distance</td>
+                <td>optimal</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="object ${#objects}">
+                <td th:each="${object}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
