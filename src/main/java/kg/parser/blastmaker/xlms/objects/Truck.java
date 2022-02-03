@@ -17,11 +17,14 @@ public class Truck {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private Long id;
 
+   @Column(unique = true)
     private String name;
 
-    private double carrying_capacity;
+    private double carrying_capacity_norm;
+
+    private double carrying_capacity_max;
 
     private double volume;
 

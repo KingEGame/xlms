@@ -10,16 +10,18 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "excavator")
+@Table(name = "ex")
 public class Excavator {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private Long id;
 
     private String name;
 
-    private double carrying_capacity;
+    private double carrying_capacity_max;
+
+    private double carrying_capacity_norm;
 
     private double volume;
 

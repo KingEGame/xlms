@@ -25,4 +25,12 @@ public class TruckService {
     public List<Truck> findAll(){
         return  truckRepository.findAll();
     }
+
+    public Truck getById(Long id){
+        return truckRepository.getById(id);
+    }
+
+    public Truck getByName(String name){
+        return truckRepository.getByName(name).get(0);
+    }
 }

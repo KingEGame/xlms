@@ -1,26 +1,40 @@
 package kg.parser.blastmaker.xlms.optimize;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 /**
  * Рптимальные решения планирования смено-суточных параметров ЭТК
  */
+@Service
 public class Solution {
+
+    @Autowired
+    Waste waste;
+
+    private double min_value = 0;
 
     /**
      * Z_пj и M_пj - планок значения
      * Z_ij - относительные отклонения суточных затрат
      * M_ij - погрузочные-транспортные работы и их объемы
-     * @param mass_truck
-     * @param speed
-     * @param distance
-     * @param mass_ex
-     * @param mass_truck_nom
-     * @return
+     * @param mass_truck_max -максимальное грузопоедесность самосвала
+     * @param speed - скорость самосвала
+     * @param distance - дистанция
+     * @param mass_ex_max - максимальная груподьемность ковша
+     * @param mass_truck_norm - номинальная грузоподьемность самосвала
+     * @param give_money_for_work - величина суточной транспортно-выемочной удельной себестоимости
+     * @param plan_ex_work -  план сменно-суточной отработки горного материала
+     * todo  - расчитать план сменно-суточной отработки горного материала М_па mass_norm_truck/reise,  предельная величина суточной транспортно-выемочной удельной себестоимости S_пj, Что такое M_ij
+     * @return - Будем оценивать эффективность плана ij-го ЭТК суммой квадратов относительных отклонений суточных затрат - Z_ij на погрузочно-транспортные работы и их объёмов - M_ij от их плановых значений Z_пj и M_пj
      */
-    public double effect_plan(double mass_truck, double speed, double distance, double mass_ex, double mass_truck_nom){
-        Waste waste = new Waste();
-        return Math.pow(1 - waste.model_day_waste(mass_truck, speed, distance, mass_ex, mass_truck_nom)/(1 /*TODO S_pj + M_pj */ + 1), 2) + Math.pow((1- (1 /* TODO M_ij / M_pj *// 1)), 2);
-    }
+//    public double effect_plan(double mass_truck_max, double speed, double distance, double mass_ex_max, double mass_truck_norm, double plan_ex_work, double give_money_for_work){
+//
+//        return Math.pow(
+//                1 - waste.model_day_waste(mass_truck_max, speed, distance, mass_ex_max, mass_truck_norm)/(give_money_for_work /*TODO S_pj + M_pj */ + plan_ex_work), 2)
+//                + Math.pow((1- (1 /* TODO M_ij / M_pj *// plan_ex_work)), 2);
+//    }
 
 
     /**
@@ -28,16 +42,20 @@ public class Solution {
      * которые доставля.т минимальные функции, при заланной  номинальной кмкости ковша - m_кj,
      * плане выемочный работ М_эi, пло=ановом премени Т_пб длительности цикла черпания t_ц, и плеча возки L_j
      *
-     * @param mass_ex_nom
-     * @param plan_take_work
-     * @param mass_truck
-     * @param speed
-     * @param distance
-     * @param mass_ex
-     * @param mass_truck_nom
-     * @return
+     *  @param mass_truck_max -максимальное грузопоедесность самосвала
+     *  @param speed - скорость самосвала
+     *  @param distance - дистанция
+     *  @param mass_ex_max - максимальная груподьемность ковша
+     *  @param mass_truck_norm - номинальная грузоподьемность самосвала
+     *  @param give_money_for_work - величина суточной транспортно-выемочной удельной себестоимости
+     *  @param plan_ex_work -  план сменно-суточной отработки горного материала
+     * @return - минмальное; Будем оценивать эффективность плана ij-го ЭТК суммой квадратов относительных отклонений суточных затрат - Z_ij на погрузочно-транспортные работы и их объёмов - M_ij от их плановых значений Z_пj и M_пj:
      */
-    public double min_value_parrameters(double mass_ex_nom, double  plan_take_work, double mass_truck, double speed, double distance, double mass_ex, double mass_truck_nom) {
-        return /* TODO нужно найти минимальное значение */ effect_plan(mass_truck, speed , distance, mass_ex, mass_truck_nom );
-    }
+//    public double min_value_parrameters( double mass_truck_max, double speed, double distance, double mass_ex_max, double mass_truck_norm, double plan_ex_work, double give_money_for_work ) {
+//        double value =effect_plan(mass_truck_max, speed , distance, mass_ex_max, mass_truck_norm, plan_ex_work, give_money_for_work );
+//        if(min_value == 0 || min_value > value) {
+//            min_value = value;
+//        }
+//        return /* TODO нужно найти минимальное значение */ min_value;
+//    }
 }

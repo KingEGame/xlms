@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script data-require="jquery@*" data-semver="2.1.3" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <link data-require="bootstrap-glyphicons@*" data-semver="3.2.1" rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/img/glyphicons-halflings.png" />
+    <link data-require="bootstrap@*" data-semver="3.3.1" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <script data-require="bootstrap@*" data-semver="3.3.1" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Дни</th>
+        <th scope="col">Вес фактический</th>
+        <th scope="col">Вес нормальный</th>
+        <th scope="col">Экскаватор</th>
+        <th scope="col">Затраты</th>
+        <th scope="col">Руб./Т*КМ</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="element : ${month}">
+        <td th:text="${element.day}"></td>
+        <td th:text="${element.weight_fact}"></td>
+        <td th:text="${element.weight_norm}"></td>
+        <td>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Тип Эскаватора</th>
+                    <th scope="col">Тип работы</th>
+                    <th scope="col">Вес фактический</th>
+                    <th scope="col">Вес нормальный</th>
+                    <th scope="col">Затраты</th>
+                    <th scope="col">Руб./Т*КМ</th>
+                    <th scope="col">Самосвалы</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="exs : ${element.ex}">
+                    <td th:text="${exs.name}"></td>
+                    <td th:text="${exs.typeofWork}"></td>
+                    <td th:text="${exs.weightFact}"></td>
+                    <td th:text="${exs.weightNorm}"></td>
+                    <td th:text="${exs.waste}"></td>
+                    <td th:text="${exs.wastePerKM}"></td>
+                    <td>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Факт кол-во</th>
+                                <th scope="col">Тип Самосвала</th>
+                                <th scope="col">Скорость</th>
+                                <th scope="col">Затраты</th>
+                                <th scope="col">Руб./Т*КМ</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="truck : ${exs.truks}">
+                                <td th:text="${truck.quantity}"></td>
+                                <td th:text="${truck.name}"></td>
+                                <td th:text="${truck.speed}"></td>
+                                <td th:text="${truck.waste}"></td>
+                                <td th:text="${truck.wastePerKM}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+        <td th:text="${element.waste}"></td>
+        <td th:text="${element.wastePerMKM}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
