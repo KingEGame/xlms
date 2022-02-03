@@ -38,15 +38,15 @@ public class Parser {
                     reise(Integer.parseInt(strs[3])).
                     numEx(strs[4]).
                     nameEx(strs[5]).
-                    timeOfComeLoading( Time.valueOf(strs[6])).
-                    timeOfBeginLoading(Time.valueOf(strs[7])).
+                    timeOfComeLoading(Timestamp.valueOf(LocalDateTime.parse((strs[6]),DateTimeFormatter.ofPattern("dd.MM.yyyy H:mm")))).
+                    timeOfBeginLoading(Timestamp.valueOf(LocalDateTime.parse((strs[7]),DateTimeFormatter.ofPattern("dd.MM.yyyy H:mm")))).
                     timeOfLoading( Time.valueOf(strs[8])).
                     distance(Double.parseDouble(strs[9].replace(",", "."))).
                     weightFact(Integer.parseInt(strs[10])).
                     weightNorm(Double.parseDouble(strs[11].replace(",", "."))).
                     typeOfWork(strs[12]).
                     placeToUnloading(strs[13]).
-                    timeOfBeginUnloading(Time.valueOf(strs[14])).
+                    timeOfBeginUnloading(Timestamp.valueOf(LocalDateTime.parse(strs[14],DateTimeFormatter.ofPattern("dd.MM.yyyy H:mm")))).
                     timeOfUnloading( Time.valueOf(strs[15])).
                     gasForBeginLoading(Integer.parseInt(strs[16])).
                     gasForBeginUnloading(Integer.parseInt(strs[17])).

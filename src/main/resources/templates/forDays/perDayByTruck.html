@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script data-require="jquery@*" data-semver="2.1.3" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <link data-require="bootstrap-glyphicons@*" data-semver="3.2.1" rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/img/glyphicons-halflings.png" />
+    <link data-require="bootstrap@*" data-semver="3.3.1" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <script data-require="bootstrap@*" data-semver="3.3.1" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col" >Номер самосвала</th>
+            <th scope="col" >Тип самосвала</th>
+            <th scope="col" >Тип эксковатора</th>
+            <th scope="col" >Количество рейсов</th>
+            <th scope="col" >Средняя скорость</th>
+            <th scope="col" >Среднее потраченное топливо</th>
+            <th scope="col" >Средняя стоимость топливо (50с за л)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="object : ${items}">
+            <td th:text="${object.num}">numSamosval</td>
+            <td th:text="${object.model}">typeSamosval</td>
+            <td th:text="${object.ex}">typeEx</td>
+            <td th:text="${object.count}">typeSamosval</td>
+            <td th:text="${object.avg_speed}">reise</td>
+            <td th:text="${object.avg_waste_gas}">numEx</td>
+            <td th:text="${#numbers.formatDecimal(object.avg_waste_gas * 50, 0, 6)}">numEx</td>
+            <td><a th:href="@{|../day/${day}/num/${object.num}|}">По каждому рейсу</a> </td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

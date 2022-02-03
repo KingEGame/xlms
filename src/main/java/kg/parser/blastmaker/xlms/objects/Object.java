@@ -16,7 +16,7 @@ public class Object {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private Long id;
 
     private int numSamosval;
 
@@ -30,9 +30,9 @@ public class Object {
 
     private String nameEx;
 
-    private Time timeOfComeLoading;
+    private Timestamp timeOfComeLoading;
 
-    private Time timeOfBeginLoading;
+    private Timestamp timeOfBeginLoading;
 
     private Time timeOfLoading;
 
@@ -46,7 +46,7 @@ public class Object {
 
     private String placeToUnloading;
 
-    private Time timeOfBeginUnloading;
+    private Timestamp timeOfBeginUnloading;
 
     private Time timeOfUnloading;
 

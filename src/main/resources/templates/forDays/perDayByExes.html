@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script data-require="jquery@*" data-semver="2.1.3" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <link data-require="bootstrap-glyphicons@*" data-semver="3.2.1" rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/img/glyphicons-halflings.png" />
+    <link data-require="bootstrap@*" data-semver="3.3.1" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <script data-require="bootstrap@*" data-semver="3.3.1" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<h3><a th:href="@{|../${day}/optimize|}">Optimize</a> </h3>
+<h3><a th:href="@{|../${day-1}/|}">down</a> </h3>
+<h3><a th:href="@{|../${day+1}/|}">up</a> </h3>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col" >Водитель эксковатора</th>
+        <th scope="col" >Тип эксковатора</th>
+        <th scope="col" >Тип работы</th>
+        <th scope="col" >Cамосвала</th>
+        <th scope="col" >Вес факстическоий</th>
+        <th scope="col" >Вес нормальный</th>
+        <th scope="col" >Процент</th>
+        <th scope="col" >Растояние</th>
+        <th scope="col" >топлифо потраченное</th>
+        <th scope="col" >Стоимость топливо (50с за л)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="object : ${items}">
+        <td th:text="${object.driver_ex}">numSamosval</td>
+        <td th:text="${object.name_ex}">typeSamosval</td>
+        <td th:text="${object.typeOfWork}">typeSamosval</td>
+        <td >
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col" >Факт. кол-во</th>
+                    <th scope="col" >Тип самосвала</th>
+                    <th scope="col" >затраты</th>
+                    <th scope="col" >р\т*км</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="truck : ${object.trucks}">
+                    <td th:text="${truck.quantity}"></td>
+                    <td th:text="${truck.name}"></td>
+                    <td th:text="${truck.waste}"></td>
+                    <td th:text="${truck.wastePerKM}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+        <td th:text="${object.weight_fact}">typeSamosval</td>
+        <td th:text="${object.weight_norm}">reise</td>
+        <td th:text="${#numbers.formatDecimal((object.weight_fact-object.weight_norm)/object.weight_norm * 100.0,0,3)}">reise</td>
+        <td th:text="${object.distance}">numEx</td>
+        <td th:text="${object.gas}">numEx</td>
+        <td th:text="${object.gas * 50}">numEx</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

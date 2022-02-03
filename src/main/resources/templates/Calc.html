@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script data-require="jquery@*" data-semver="2.1.3" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <link data-require="bootstrap-glyphicons@*" data-semver="3.2.1" rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/img/glyphicons-halflings.png" />
+    <link data-require="bootstrap@*" data-semver="3.3.1" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <script data-require="bootstrap@*" data-semver="3.3.1" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div>
+    <h3>Сортировка по видам работ: </h3>
+    <ul>
+        <li th:each="type : ${types}">
+            <a th:href="@{|../type/${type}|}"><span th:text="${type}"></span> </a>
+        </li>
+    </ul>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Дни</th>
+            <th scope="col">Растояние</th>
+            <th scope="col">Топливо</th>
+            <th scope="col">Виды самосвалов и их количество</th>
+            <th scope="col">Виды эксковаторов и их количество</th>
+            <th scope="col">Количество рейсов</th>
+            <th scope="col">Вес фактический</th>
+            <th scope="col">Вес нормальный</th>
+            <th scope="col">процент</th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr th:each="element : ${catsAndItems}">
+        <th scope="row" th:text="${element.key}">keyvalue</th>
+            <div th:each="anews : ${element.value}">
+                <td th:text="${anews.distance}">Some name</td>
+                <td th:text="${anews.gas}">Some name</td>
+                <td ><p th:each="truck : ${anews.trucks}" th:text="${truck}"></td>
+                <td ><p th:each="ex : ${anews.exs}" th:text="${ex}"></td>
+                <td th:text="${anews.quantityReise}">Some name</td>
+                <td th:text="${anews.weightFact}">Some name</td>
+                <td th:text="${anews.weightNorm}">Some name</td>
+                <td th:text="${#numbers.formatDecimal(((anews.weightFact-anews.weightNorm)/anews.weightNorm  * 100.0), 0, 6)}">Some name</td>
+                <td>
+                    <a th:href="@{|../perdayByTruck/${element.key}|}">По каждому самосвалу</a><br>
+                    <a th:href="@{|../perdayByEx/${element.key}|}">По каждому Эксковатору</a>
+                </td>
+            </div>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
