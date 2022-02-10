@@ -3,7 +3,7 @@ package kg.parser.blastmaker.xlms.controller;
 import kg.parser.blastmaker.xlms.nowaday.Calculation;
 import kg.parser.blastmaker.xlms.nowaday.model.PerReise;
 import kg.parser.blastmaker.xlms.objects.Object;
-import kg.parser.blastmaker.xlms.objects.Parser;
+import kg.parser.blastmaker.xlms.service.Parser;
 import kg.parser.blastmaker.xlms.objects.Truck;
 import kg.parser.blastmaker.xlms.service.ObjectService;
 import kg.parser.blastmaker.xlms.service.TruckService;
@@ -39,12 +39,6 @@ public class GreetingController {
         return "Calc";
     }
 
-    @GetMapping("/greeting")
-    public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-        model.addAttribute("name", name);
-        return "greeting";
-    }
-
     @GetMapping("/parse")
     public String submit() {
         Parser parser = new Parser("src/main/resources/text.txt");
@@ -59,11 +53,6 @@ public class GreetingController {
         model.addAttribute("objects", objects);
 
         return "List";
-    }
-
-    @GetMapping("/optimize")
-    public String optimize(){
-        return "optimize";
     }
 
     @GetMapping("/trucks")

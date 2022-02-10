@@ -1,10 +1,8 @@
-package kg.parser.blastmaker.xlms.objects;
+package kg.parser.blastmaker.xlms.service;
 
-import kg.parser.blastmaker.xlms.service.ObjectService;
+import kg.parser.blastmaker.xlms.objects.Object;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.sql.Time;
