@@ -39,4 +39,8 @@ public class Truck {
     private double normal_weight;
 
     private double specific_waste_gas;
+
+    public boolean equals(Truck o){
+        return o.name.equals(name);
+    }
 }
