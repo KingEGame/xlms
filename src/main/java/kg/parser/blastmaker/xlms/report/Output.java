@@ -81,6 +81,13 @@ public class Output {
         return temp;
     }
 
+
+    /**
+     * Функция для Эрлана
+     * Высчета удельного расхода горючего по каждому рейсу дня по определенному самосвалу.
+     * Для проверки
+     *  TODO Эрлан
+     */
     public void month(){
         List<Month> month = new ArrayList<>();
 
@@ -118,7 +125,7 @@ public class Output {
                     double waste_gas = ob.getGasForBeginLoading() - ob.getGasForBeginUnloading();
                     truck.setWaste_gas(waste_gas + truck.getAvg_waste_gas());
 
-                    truck.setSpecific_waste_with_mass(equation.waste_constant_gas_with_mass(waste_gas, ob.getWeightFact()+(truckDTO.getNormal_weight()/1000), hours, speed) + truck.getSpecific_waste_with_mass());
+                    truck.setSpecific_waste_with_mass(equation.specific_gas(waste_gas, ob.getWeightFact()+(truckDTO.getNormal_weight()/1000), hours, speed) + truck.getSpecific_waste_with_mass());
 
                     if(check){
                         check = false;
@@ -130,7 +137,7 @@ public class Output {
                     double hours_come = (double) time_come.getSeconds() / 3600;
                     double speed_come = temp.getDistance()/hours;
                     if(temp.getGasForBeginUnloading() - ob.getGasForBeginLoading() > 0)
-                        truck.setSpecific_waste_without_mass(equation.waste_constant_gas_without_mass(temp.getGasForBeginUnloading() - ob.getGasForBeginLoading(), truckDTO.getNormal_weight()/1000, hours_come, speed_come) + truck.getSpecific_waste_without_mass());
+                        truck.setSpecific_waste_without_mass(equation.specific_gas(temp.getGasForBeginUnloading() - ob.getGasForBeginLoading(), truckDTO.getNormal_weight()/1000, hours_come, speed_come) + truck.getSpecific_waste_without_mass());
 
                     temp = ob;
                 }
@@ -158,6 +165,14 @@ public class Output {
         }
 
     }
+
+    /**
+     *
+     * Функция для высчета месячных затрат по суткам
+     * Работает на данный момент не корректно
+     *
+     * @return - возвращает список обектов Waste
+     */
 
     public List<Waste> wasteMonth() {
 
@@ -217,6 +232,8 @@ public class Output {
      * Все данные усредненные по сутке
      *
      * Входные данные (день, тип самосвала)
+     *
+     * @return - возвращает обьект ComingTruck который высчитывается для порожнего самосвала
      * */
 
     private ComingTruck get_come(Timestamp date, String truckName){

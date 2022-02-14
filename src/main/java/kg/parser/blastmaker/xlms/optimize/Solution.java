@@ -26,14 +26,13 @@ public class Solution {
      * @param mass_truck_norm - номинальная грузоподьемность самосвала
      * @param give_money_for_work - величина суточной транспортно-выемочной удельной себестоимости
      * @param plan_ex_work -  план сменно-суточной отработки горного материала
-     * todo  - расчитать план сменно-суточной отработки горного материала М_па mass_norm_truck/reise,  предельная величина суточной транспортно-выемочной удельной себестоимости S_пj, Что такое M_ij
      * @return - Будем оценивать эффективность плана ij-го ЭТК суммой квадратов относительных отклонений суточных затрат - Z_ij на погрузочно-транспортные работы и их объёмов - M_ij от их плановых значений Z_пj и M_пj
      */
 //    public double effect_plan(double mass_truck_max, double speed, double distance, double mass_ex_max, double mass_truck_norm, double plan_ex_work, double give_money_for_work){
 //
 //        return Math.pow(
-//                1 - waste.model_day_waste(mass_truck_max, speed, distance, mass_ex_max, mass_truck_norm)/(give_money_for_work /*TODO S_pj + M_pj */ + plan_ex_work), 2)
-//                + Math.pow((1- (1 /* TODO M_ij / M_pj *// plan_ex_work)), 2);
+//                1 - waste.model_day_waste(mass_truck_max, speed, distance, mass_ex_max, mass_truck_norm)/(give_money_for_work + plan_ex_work), 2)
+//                + Math.pow((1- (1 / plan_ex_work)), 2);
 //    }
 
 
@@ -56,6 +55,6 @@ public class Solution {
 //        if(min_value == 0 || min_value > value) {
 //            min_value = value;
 //        }
-//        return /* TODO нужно найти минимальное значение */ min_value;
+//        return min_value;
 //    }
 }

@@ -41,9 +41,9 @@ public class Equation {
     public double cost_gas(double mass_truck_norm, double speed_go , double waste_gas_with_mass, double waste_gas_without_mass, double timeInHours_go,
                            double timeInhours_come, double mass_truck_max, double speed_come){
         return 0.5*Constants.cost_gas*mass_truck_norm *
-                Precision.round(Math.pow(speed_go,2),2) *(waste_constant_gas_with_mass(waste_gas_with_mass, mass_truck_max, timeInHours_go, speed_go)*1 +
-                Precision.round(0.73*(waste_constant_gas_with_mass(waste_gas_with_mass, mass_truck_max, timeInHours_go, speed_go)+
-                        waste_constant_gas_without_mass(waste_gas_without_mass, mass_truck_norm, timeInhours_come, speed_come)),4));
+                Precision.round(Math.pow(speed_go,2),2) *(specific_gas(waste_gas_with_mass, mass_truck_max, timeInHours_go, speed_go)*1 +
+                Precision.round(0.73*(specific_gas(waste_gas_with_mass, mass_truck_max, timeInHours_go, speed_go)+
+                        specific_gas(waste_gas_without_mass, mass_truck_norm, timeInhours_come, speed_come)),4));
     }
 
     public double cost_gas(double mass_truck_norm, double speed, double specific_waste_with_mass, double specific_waste_without_mass){
@@ -72,29 +72,23 @@ public class Equation {
     }
 
     /**
+     * удельные расходы по самосвалу с грузом и без
+     *
+     * Входные данные:
+     *      для груза это вес_факт. + вес_самосвала
+     *      без груза это вес_самосвала
+     *
      * затраты горючего на работу самосвала с рудой
-     * q_e = waste_gas/ )m_max * speed * time)
+     * q_e = waste_gas/ (m * speed * time)
      * @param mass_truck_max
      * @param speed
      * @param waste_gas
      * @param timeInHours
      * */
-    public double waste_constant_gas_with_mass(double waste_gas, double mass_truck_max, double timeInHours, double speed){
+    public double specific_gas(double waste_gas, double mass_truck_max, double timeInHours, double speed){
         return Precision.round(waste_gas/ Precision.round(mass_truck_max*Math.pow(speed, 2)*timeInHours, 5), 5);
     }
 
-    /**
-     * Затраты потраченные на топливо порожним самосвалом
-     *q_e = waste_gas/ )m_max * speed * time)
-     * @param timeInHours
-     * @param waste_gas
-     * @param speed
-     * @param mass_truck_norm
-     * */
-
-    public double waste_constant_gas_without_mass(double waste_gas, double mass_truck_norm, double timeInHours, double speed){
-        return Precision.round(waste_gas/Precision.round(mass_truck_norm*Math.pow(speed, 2)*timeInHours, 5),5);
-    }
 
 
     /**

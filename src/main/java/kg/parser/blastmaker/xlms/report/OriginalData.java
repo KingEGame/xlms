@@ -25,6 +25,13 @@ public class OriginalData {
     @Autowired
     private ObjectService objectService;
 
+
+    /**
+     * Функция для расчета выходного месячного документа, также выбока по типам работ
+     *
+     * @param type можно передать "" без выборки, либо "Тип работы"
+     * @return
+     */
     public HashMap<Integer, Month> month(String type){
         HashMap<Integer, Month> month = new HashMap<>();
 
@@ -132,6 +139,13 @@ public class OriginalData {
         return views;
     }
 
+
+    /**
+     * Функция для рвсчета выходного документа по эксковаторам для суток с его связкой самосвалов
+     *
+     * @param day - день
+     * @return список обьектов типа Ex
+     */
     public List<Ex> perDayByExes(int day){
         List<Ex> views = new ArrayList<>();
 
@@ -198,7 +212,13 @@ public class OriginalData {
     }
 
 
-
+    /**
+     * для выходного документа по самосвалу по рейсово
+     *
+     * @param days - день
+     * @param num - номер самосвала
+     * @return - список обьекта PerReice
+     */
     public List<PerReice> perReice(int days, int num){
         List<PerReice> perReises = new ArrayList<>();
 
