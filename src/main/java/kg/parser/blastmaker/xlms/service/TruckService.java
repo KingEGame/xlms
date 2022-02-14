@@ -1,7 +1,6 @@
 package kg.parser.blastmaker.xlms.service;
 
-import kg.parser.blastmaker.xlms.objects.Object;
-import kg.parser.blastmaker.xlms.objects.Truck;
+import kg.parser.blastmaker.xlms.objects.TruckDTO;
 import kg.parser.blastmaker.xlms.respositiry.TruckRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,23 +13,23 @@ public class TruckService {
     @Autowired
     TruckRepository truckRepository;
 
-    public Truck save(Truck payment){
+    public TruckDTO save(TruckDTO payment){
         return truckRepository.saveAndFlush(payment);
     }
 
-    public List<Truck> saveAll(List<Truck> trucks){
-        return  truckRepository.saveAll(trucks);
+    public List<TruckDTO> saveAll(List<TruckDTO> truckDTOS){
+        return  truckRepository.saveAll(truckDTOS);
     }
 
-    public List<Truck> findAll(){
+    public List<TruckDTO> findAll(){
         return  truckRepository.findAll();
     }
 
-    public Truck getById(Long id){
+    public TruckDTO getById(Long id){
         return truckRepository.getById(id);
     }
 
-    public Truck getByName(String name){
+    public TruckDTO getByName(String name){
         return truckRepository.getByName(name).get(0);
     }
 }

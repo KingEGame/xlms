@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ForComeSum {
+public class ComingTruck {
 
     private double speed;
     private double gas;

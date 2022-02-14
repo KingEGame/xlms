@@ -1,10 +1,10 @@
 package kg.parser.blastmaker.xlms.controller;
 
-import kg.parser.blastmaker.xlms.nowaday.Calculation;
-import kg.parser.blastmaker.xlms.nowaday.model.PerReise;
+import kg.parser.blastmaker.xlms.report.OriginalData;
+import kg.parser.blastmaker.xlms.model.PerReice;
 import kg.parser.blastmaker.xlms.objects.Object;
 import kg.parser.blastmaker.xlms.service.Parser;
-import kg.parser.blastmaker.xlms.objects.Truck;
+import kg.parser.blastmaker.xlms.objects.TruckDTO;
 import kg.parser.blastmaker.xlms.service.ObjectService;
 import kg.parser.blastmaker.xlms.service.TruckService;
 //import kg.parser.blastmaker.xlms.service.UserService;
@@ -25,7 +25,7 @@ public class GreetingController {
     TruckService truckService;
 
     @Autowired
-    Calculation calculation;
+    OriginalData calculation;
 
     @GetMapping({"/home", "/"})
     public String viewHomePage() {
@@ -35,7 +35,7 @@ public class GreetingController {
     @GetMapping("/calc/type")
     public String calc(Model model){
         model.addAttribute("types", objectService.getAllTypeOfWork());
-        model.addAttribute("catsAndItems", calculation.time(""));
+        model.addAttribute("catsAndItems", calculation.month(""));
         return "Calc";
     }
 
@@ -57,15 +57,15 @@ public class GreetingController {
 
     @GetMapping("/trucks")
     public String truck( Model model){
-        List<Truck> trucks = truckService.findAll();
-        model.addAttribute("trucks",trucks );
+        List<TruckDTO> truckDTOS = truckService.findAll();
+        model.addAttribute("trucks", truckDTOS);
         return "Trucks";
     }
 
     @GetMapping("/waste")
     public String waste(Model model){
-        List<Truck> trucks = truckService.findAll();
-        model.addAttribute("truks", trucks);
+        List<TruckDTO> truckDTOS = truckService.findAll();
+        model.addAttribute("truks", truckDTOS);
         return "waste";
     }
 
@@ -85,7 +85,7 @@ public class GreetingController {
 
     @GetMapping("calc/day/{day}/num/{num}")
     String perReise(Model model,@PathVariable(value = "day") int day, @PathVariable(value = "num")Integer num){
-        List<PerReise> objects = calculation.perreise(day,num);
+        List<PerReice> objects = calculation.perReice(day,num);
         model.addAttribute("items", objects);
         return "forDays\\perReise";
     }
@@ -93,7 +93,7 @@ public class GreetingController {
     @GetMapping("calc/type/{type}")
     String sortByType(Model model, @PathVariable(value = "type") String type){
         model.addAttribute("types", objectService.getAllTypeOfWork());
-        model.addAttribute("catsAndItems", calculation.time(type));
+        model.addAttribute("catsAndItems", calculation.month(type));
         return "Calc";
     }
 

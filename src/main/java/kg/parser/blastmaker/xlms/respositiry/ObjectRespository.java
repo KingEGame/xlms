@@ -1,6 +1,5 @@
 package kg.parser.blastmaker.xlms.respositiry;
 
-import kg.parser.blastmaker.xlms.nowaday.model.PerMonth;
 import kg.parser.blastmaker.xlms.objects.Object;
  import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,9 +14,6 @@ public interface ObjectRespository extends JpaRepository<Object, Long> {
  @Modifying
  @Query(value = "SELECT * FROM object u WHERE u.type_of_work = ?1 order by u.time_of_come_loading", nativeQuery = true)
  List<Object> findObjectByTypeOfWork(String typeofwork);
-
- @Query(value = "select sum(distance) as distance, sum(abs(gas_for_begin_loading-gas_for_begin_unloading)) as waste_gas, sum(weight_fact) as weight_fact, sum(weight_norm) as weight_norm from object where date(time_of_come_loading) = date(?1)", nativeQuery = true)
-List<PerMonth> objects (Timestamp time);
 
  @Modifying
  @Query(value = "SELECT * FROM object u WHERE u.type_of_work = ?1 and date(u.time_of_come_loading) = date(?2) order by u.time_of_come_loading", nativeQuery = true)
@@ -37,19 +33,19 @@ List<PerMonth> objects (Timestamp time);
 
  @Modifying
  @Query(value = "select  date(time_of_come_loading) as d from object group by d order by d", nativeQuery = true)
- List<Date> findAllDate();
+ List<Date> findAllDateTime();
 
  @Modifying
  @Query(value = "SELECT count(num_samosval) FROM object WHERE date(time_of_come_loading) = ?1 and type_samosval = ?2 group by num_samosval", nativeQuery = true)
- List<Integer> getCountSamosvalbyDateAndType( Timestamp time_of_come_loading2,  String type_samosval);
+ List<Integer> findCountSamosvalbyDateAndType(Timestamp time_of_come_loading2, String type_samosval);
 
  @Modifying
  @Query(value = "select type_of_work from object group by type_of_work", nativeQuery = true)
- List<String> getAllTypeOfWork();
+ List<String> findAllTypeOfWork();
 
  @Modifying
  @Query(value = "select num_samosval from object where date(time_of_come_loading) = date(?1) group by num_samosval", nativeQuery = true)
- List<Integer> getNums(Timestamp date);
+ List<Integer> findNums(Timestamp date);
 
  @Query(value = "select max(reise) from object where date(time_of_come_loading) = ?1 and num_samosval = ?2", nativeQuery = true)
  Integer getMaxReise(Timestamp date, Integer num);
@@ -147,25 +143,25 @@ List<PerMonth> objects (Timestamp time);
 
 
 
- @Query(value = "select num_samosval,\n" +
-         "       type_samosval,\n" +
-         "       num_ex,\n" +
+ @Query(value = "select g.num_samosval,\n" +
+         "       g.type_samosval,\n" +
+         "       g.num_ex,\n" +
          "       (select count(reise)\n" +
-         "       from object c\n" +
-         "       where c.num_samosval = g.num_samosval\n" +
-         "         and date(c.time_of_come_loading) = ?1) as count_reise,\n" +
+         "        from object c\n" +
+         "        where c.num_samosval = g.num_samosval\n" +
+         "          and date(c.time_of_come_loading) = ?1) as count_reise,\n" +
          "       round(cast((select sum(b.distance / (extract(epoch from (b.time_of_begin_unloading - b.time_of_come_loading)) /\n" +
          "                                            3600)::double precision) / count(b.reise)\n" +
          "                   from object b\n" +
-         "                   where date(b.time_of_come_loading) = '2019-11-01'\n" +
+         "                   where date(b.time_of_come_loading) = date(?1)\n" +
          "                     and b.num_samosval = g.num_samosval) as numeric), 5) as speed,\n" +
-         "       sum(weight_fact) weight_fact,\n" +
-         "       round(cast(sum(weight_norm) as numeric), 5) weight_norm,\n" +
-         "       round(cast(sum(distance) as numeric),5) distance,\n" +
-         "       sum(abs(gas_for_begin_unloading-gas_for_begin_loading)) waste_gas\n" +
+         "             sum(weight_fact) weight_fact,\n" +
+         "             round(cast(sum(weight_norm) as numeric), 5) weight_norm,\n" +
+         "             round(cast(sum(distance) as numeric),5) distance,\n" +
+         "             sum(abs(gas_for_begin_unloading-gas_for_begin_loading)) waste_gas\n" +
          "from object g\n" +
          "where date(time_of_come_loading) = ?1\n" +
-         "      and type_of_work = ?2\n" +
+         " and type_of_work = ?2\n" +
          "group by num_samosval, type_samosval, num_ex;",nativeQuery = true )
  List<String[]> getBySumosvalByDayByTypeOfWork(Timestamp time, String type);
 
@@ -197,6 +193,10 @@ List<PerMonth> objects (Timestamp time);
          "      and num_samosval = ?2",nativeQuery = true )
  List<String[]> getDataByDayByNumsum(Timestamp time, Integer num);
 
+ /**
+  * Функия при запросе БД
+  * Для взятия данных о дне с определенным вида самосвалом, где берется самосвал с самым большим количеством рейсов
+  * */
  @Query(value = "SELECT *\n" +
          "FROM object g\n" +
          "WHERE date(g.time_of_come_loading) = date(?1)\n" +

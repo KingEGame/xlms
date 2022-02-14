@@ -32,6 +32,7 @@
                 <tr>
                     <th scope="col">Тип Эскаватора</th>
                     <th scope="col">Тип работы</th>
+                    <th scope="col">Растояние</th>
                     <th scope="col">Вес фактический</th>
                     <th scope="col">Вес нормальный</th>
                     <th scope="col">Затраты</th>
@@ -41,8 +42,9 @@
                 </thead>
                 <tbody>
                 <tr th:each="exs : ${element.ex}">
-                    <td th:text="${exs.name}"></td>
+                    <td th:text="${exs.type}"></td>
                     <td th:text="${exs.typeofWork}"></td>
+                    <td th:text="${exs.distance}"></td>
                     <td th:text="${exs.weightFact}"></td>
                     <td th:text="${exs.weightNorm}"></td>
                     <td th:text="${exs.waste}"></td>
@@ -59,12 +61,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="truck : ${exs.truks}">
-                                <td th:text="${truck.quantity}"></td>
-                                <td th:text="${truck.name}"></td>
-                                <td th:text="${truck.speed}"></td>
-                                <td th:text="${truck.waste}"></td>
-                                <td th:text="${truck.wastePerKM}"></td>
+                            <tr th:each="truckDTO : ${exs.truckDTOS}">
+                                <td th:text="${truckDTO.quantity}"></td>
+                                <td th:text="${truckDTO.name}"></td>
+                                <td th:text="${truckDTO.speed}"></td>
+                                <td th:text="${truckDTO.waste}"></td>
+                                <td th:text="${truckDTO.wastePerKM}"></td>
                             </tr>
                             </tbody>
                         </table>

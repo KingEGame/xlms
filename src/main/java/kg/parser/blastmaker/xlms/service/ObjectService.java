@@ -3,11 +3,9 @@ package kg.parser.blastmaker.xlms.service;
 import kg.parser.blastmaker.xlms.objects.Object;
 import kg.parser.blastmaker.xlms.respositiry.ObjectRespository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class ObjectService {
     }
 
     public List<Date> getAllDate(){
-        return objectRespository.findAllDate();
+        return objectRespository.findAllDateTime();
     }
 
     public List<Object> findByTimeOfComeLoading(Timestamp timestamp){
@@ -50,11 +48,11 @@ public class ObjectService {
     }
 
     public int getCountSamosvalByTimeAndType(Timestamp date, String type){
-        return objectRespository.getCountSamosvalbyDateAndType(date, type).size();
+        return objectRespository.findCountSamosvalbyDateAndType(date, type).size();
     }
 
     public List<Integer> getNums(Timestamp date){
-        return objectRespository.getNums(date);
+        return objectRespository.findNums(date);
     }
 
     public int getMaxReise(Timestamp date, Integer num_samosval){
@@ -67,7 +65,7 @@ public class ObjectService {
 
 
     public List<String> getAllTypeOfWork(){
-        return objectRespository.getAllTypeOfWork();
+        return objectRespository.findAllTypeOfWork();
     }
 
     public int getCountEx(Timestamp date, String ex) {

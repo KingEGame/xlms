@@ -19,6 +19,10 @@
     </ul>
 </div>
 
+<div>
+    <h3><a href="../optimize">Optimize</a> </h3>
+</div>
+
 <table class="table">
     <thead>
         <tr>
@@ -39,12 +43,12 @@
             <div th:each="anews : ${element.value}">
                 <td th:text="${anews.distance}">Some name</td>
                 <td th:text="${anews.gas}">Some name</td>
-                <td ><p th:each="truck : ${anews.trucks}" th:text="${truck}"></td>
+                <td ><p th:each="truckDTO : ${anews.truckDTOS}" th:text="${truckDTO}"></td>
                 <td ><p th:each="ex : ${anews.exs}" th:text="${ex}"></td>
                 <td th:text="${anews.quantityReise}">Some name</td>
                 <td th:text="${anews.weightFact}">Some name</td>
                 <td th:text="${anews.weightNorm}">Some name</td>
-                <td th:text="${#numbers.formatDecimal(((anews.weightFact-anews.weightNorm)/anews.weightNorm  * 100.0), 0, 6)}">Some name</td>
+                <td th:text="${#numbers.formatDecimal(((anews.weightFact-anews.weightNorm)/anews.weightNorm  * 100.0), 0, 5)}">Some name</td>
                 <td>
                     <a th:href="@{|../perdayByTruck/${element.key}|}">По каждому самосвалу</a><br>
                     <a th:href="@{|../perdayByEx/${element.key}|}">По каждому Эксковатору</a>

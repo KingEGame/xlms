@@ -12,15 +12,25 @@ import java.util.List;
 @AllArgsConstructor
 public class Ex {
 
-    private String name;
-    private String driver;
+    private String type;
+    private String driver_name;
     private String typeofWork;
     private double waste;
     private double wastePerKM;
     private double weightFact;
     private double weightNorm;
     private double distance;
-    private List<TruckForEx> truks;
+    private List<Truck> trucks;
     private Timestamp timePlan;
     private Timestamp timeFact;
+
+    private double speed;
+    private double timeInHours;
+    private double weight_fact;
+    private double weight_fact_avarage;
+    private double weight_norm;
+    private double weight_norm_avarage;
+    private int gas;
+    private double gas_avarage;
+    private double distance_avarage;
 }

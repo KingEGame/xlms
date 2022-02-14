@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class Optimal {
 
     @Autowired
-    Waste waste;
+    Equation equation;
     /**
      * оптимальная скорость дивжения самосвалов i-го типа при j-ом типе эксковатора
      *
@@ -37,6 +37,6 @@ public class Optimal {
      * @return
      */
     public  double optimal_quantity(double distance, double mass_ex_max, double mass_truck_max, double speed){
-        return waste.quality_trucks(distance, mass_ex_max, mass_truck_max, speed);
+        return equation.quality_trucks(distance, mass_ex_max, mass_truck_max, speed);
     }
 }

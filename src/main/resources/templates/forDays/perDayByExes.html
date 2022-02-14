@@ -33,8 +33,8 @@
     </thead>
     <tbody>
     <tr th:each="object : ${items}">
-        <td th:text="${object.driver_ex}">numSamosval</td>
-        <td th:text="${object.name_ex}">typeSamosval</td>
+        <td th:text="${object.driver_name}">numSamosval</td>
+        <td th:text="${object.type}">typeSamosval</td>
         <td th:text="${object.typeOfWork}">typeSamosval</td>
         <td >
             <table class="table">
@@ -49,13 +49,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="truck : ${object.trucks}">
-                    <td th:text="${truck.quantity}"></td>
-                    <td th:text="${truck.name}"></td>
-                    <td th:text="${truck.speed}"></td>
-                    <td th:text="${truck.distance}"></td>
-                    <td th:text="${truck.waste}"></td>
-                    <td th:text="${truck.wastePerKM}"></td>
+                <tr th:each="truckDTO : ${object.truckDTOS}">
+                    <td th:text="${truckDTO.quantity}"></td>
+                    <td th:text="${truckDTO.name}"></td>
+                    <td th:text="${truckDTO.speed}"></td>
+                    <td th:text="${truckDTO.distance}"></td>
+                    <td th:text="${truckDTO.waste}"></td>
+                    <td th:text="${truckDTO.wastePerKM}"></td>
                 </tr>
                 </tbody>
             </table>

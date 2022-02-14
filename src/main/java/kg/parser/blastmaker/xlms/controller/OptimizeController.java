@@ -1,6 +1,6 @@
 package kg.parser.blastmaker.xlms.controller;
 
-import kg.parser.blastmaker.xlms.optimize.Optimize;
+import kg.parser.blastmaker.xlms.report.Output;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class OptimizeController {
 
     @Autowired
-    Optimize optimize;
+    Output output;
 
     @GetMapping("calc/perdayByEx/{day}/optimize")
     String optimize(Model model, @PathVariable(value = "day") int day){
-       model.addAttribute("items", optimize.waste(day));
+       model.addAttribute("items", output.waste(day));
        model.addAttribute("day", day);
 
         return "forDays\\perDayByExes";
@@ -23,8 +23,8 @@ public class OptimizeController {
 
     @GetMapping("/calc/optimize")
     String optimizeMonth(Model model){
-
-        model.addAttribute("month", optimize.wasteMonth());
+        output.month();
+        model.addAttribute("month", output.wasteMonth());
         return "CalcWaste";
     }
 }

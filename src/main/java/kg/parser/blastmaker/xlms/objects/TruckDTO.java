@@ -2,7 +2,6 @@ package kg.parser.blastmaker.xlms.objects;
 
 
 import lombok.*;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import javax.persistence.*;
 
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "truck")
-public class Truck {
+public class TruckDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -40,7 +39,7 @@ public class Truck {
 
     private double specific_waste_gas;
 
-    public boolean equals(Truck o){
+    public boolean equals(TruckDTO o){
         return o.name.equals(name);
     }
 }

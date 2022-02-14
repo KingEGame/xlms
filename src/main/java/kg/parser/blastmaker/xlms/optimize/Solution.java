@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class Solution {
 
     @Autowired
-    Waste waste;
+    Equation equation;
 
     private double min_value = 0;
 

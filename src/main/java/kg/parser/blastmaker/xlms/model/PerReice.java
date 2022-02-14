@@ -1,7 +1,6 @@
-package kg.parser.blastmaker.xlms.nowaday.model;
+package kg.parser.blastmaker.xlms.model;
 
 import lombok.*;
-import org.springframework.stereotype.Service;
 
 import java.sql.Time;
 
@@ -10,7 +9,7 @@ import java.sql.Time;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PerReise {
+public class PerReice {
 
     private int num;
 

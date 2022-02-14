@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WasteForMonth {
+public class Waste {
 
     private double waste;
     private double wastePerMKM;

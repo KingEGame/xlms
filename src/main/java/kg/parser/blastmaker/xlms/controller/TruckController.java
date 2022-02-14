@@ -1,6 +1,6 @@
 package kg.parser.blastmaker.xlms.controller;
 
-import kg.parser.blastmaker.xlms.objects.Truck;
+import kg.parser.blastmaker.xlms.objects.TruckDTO;
 import kg.parser.blastmaker.xlms.service.TruckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,13 +17,13 @@ public class TruckController {
 
     @GetMapping("/truck/add")
     String reviewAdd(Model model){
-        model.addAttribute("truck", new Truck());
+        model.addAttribute("truck", new TruckDTO());
         return "AddTruck";
     }
 
     @PostMapping("/truck/add")
-    String add(Model model, @ModelAttribute Truck truck){
-        truckService.save(truck);
+    String add(Model model, @ModelAttribute TruckDTO truckDTO){
+        truckService.save(truckDTO);
         return "redirect:/";
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
     Вычисление затрат
  */
 @Service
-public class Waste {
+public class Equation {
 
     /**
      * *
@@ -46,6 +46,11 @@ public class Waste {
                         waste_constant_gas_without_mass(waste_gas_without_mass, mass_truck_norm, timeInhours_come, speed_come)),4));
     }
 
+    public double cost_gas(double mass_truck_norm, double speed, double specific_waste_with_mass, double specific_waste_without_mass){
+        return 0.5*Constants.cost_gas*mass_truck_norm *
+                Precision.round(Math.pow(speed,2),2) *(specific_waste_with_mass*1 + Precision.round(0.73*(specific_waste_with_mass+ specific_waste_without_mass),4));
+    }
+
     /**
      *связанные с обеспечением готовности транспортных средств ГТК
      * Z_тг=a_0+a_1 exp(-a_2 m_aij );
@@ -62,31 +67,32 @@ public class Waste {
      * @param mass_ex_max - грузоподьемность ковша максимальная
      * @return
      */
-    private double waste_for_ex(double mass_ex_max){
+    public double waste_for_ex(double mass_ex_max){
         return (4500 * Math.log(mass_ex_max + 1))*Constants.plan_time_day_cycle;
     }
 
     /**
      * затраты горючего на работу самосвала с рудой
+     * q_e = waste_gas/ )m_max * speed * time)
      * @param mass_truck_max
      * @param speed
      * @param waste_gas
      * @param timeInHours
      * */
-    private double waste_constant_gas_with_mass(double waste_gas, double mass_truck_max, double timeInHours, double speed){
+    public double waste_constant_gas_with_mass(double waste_gas, double mass_truck_max, double timeInHours, double speed){
         return Precision.round(waste_gas/ Precision.round(mass_truck_max*Math.pow(speed, 2)*timeInHours, 5), 5);
     }
 
     /**
      * Затраты потраченные на топливо порожним самосвалом
-     *
+     *q_e = waste_gas/ )m_max * speed * time)
      * @param timeInHours
      * @param waste_gas
      * @param speed
      * @param mass_truck_norm
      * */
 
-    private double waste_constant_gas_without_mass(double waste_gas, double mass_truck_norm, double timeInHours, double speed){
+    public double waste_constant_gas_without_mass(double waste_gas, double mass_truck_norm, double timeInHours, double speed){
         return Precision.round(waste_gas/Precision.round(mass_truck_norm*Math.pow(speed, 2)*timeInHours, 5),5);
     }
 
@@ -113,6 +119,12 @@ public class Waste {
                         Constants.plan_time_day_cycle*Precision.round(quality_trucks(distance, mass_ex_max, mass_truck_norm, speed_go), 3)+
                         Precision.round(waste_for_ex(mass_ex_max), 3);
     }
-    //todo надо найти удельный расхож топлива в зашруженном и не для каждого типа самосвала и типа эксковатора по формуле q_e = waste_gas/ )m_max * speed * time)
-    //todo надо создать алгоритм для вычисления затрат на возвращение сомовлава для загрузки
+
+
+    public double model_day_waste(double speed, double mass_truck_norm, double mass_ex_max, double distance,double specific_waste_with_mass, double specific_waste_without_mass){
+        return (Precision.round(cost_gas(mass_truck_norm, speed, specific_waste_with_mass,specific_waste_without_mass), 4) +
+                Precision.round(waste_for_ready_venicle(mass_truck_norm),3)) *
+                    Constants.plan_time_day_cycle*Precision.round(quality_trucks(distance, mass_ex_max, mass_truck_norm, speed), 3)+
+                Precision.round(waste_for_ex(mass_ex_max), 3);
+    }
 }

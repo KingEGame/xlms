@@ -1,4 +1,4 @@
-package kg.parser.blastmaker.xlms.nowaday.model;
+package kg.parser.blastmaker.xlms.model;
 
 import lombok.*;
 
@@ -10,8 +10,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public
-class PerMonth {
+public class Month {
     private double distance = 0;
     private int gas = 0;
     private long weightFact = 0;
