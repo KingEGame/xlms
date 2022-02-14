@@ -1,0 +1,8 @@
+kg.parser.blastmaker.xlms
+kg.parser.blastmaker.xlms.controller
+kg.parser.blastmaker.xlms.model
+kg.parser.blastmaker.xlms.objects
+kg.parser.blastmaker.xlms.optimize
+kg.parser.blastmaker.xlms.report
+kg.parser.blastmaker.xlms.respositiry
+kg.parser.blastmaker.xlms.service
