@@ -18,7 +18,6 @@ public class Optimal {
      * @param mass_truck_max - максимальная грузоподьемность самосвала
      * @param mass_truck_norm - номинальная грузоподьемность самосвала
      * @param speed - средняяя скорость дивжени самосвала
-     *              todo need add as param the waste the empty truck gasoline!!!
      * @return
      */
 //    public double optimal_speed(double mass_truck_max, double mass_truck_norm, double speed){

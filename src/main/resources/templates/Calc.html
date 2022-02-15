@@ -43,7 +43,7 @@
             <div th:each="anews : ${element.value}">
                 <td th:text="${anews.distance}">Some name</td>
                 <td th:text="${anews.gas}">Some name</td>
-                <td ><p th:each="truckDTO : ${anews.truckDTOS}" th:text="${truckDTO}"></td>
+                <td ><p th:each="truckDTO : ${anews.trucks}" th:text="${truckDTO}"></td>
                 <td ><p th:each="ex : ${anews.exs}" th:text="${ex}"></td>
                 <td th:text="${anews.quantityReise}">Some name</td>
                 <td th:text="${anews.weightFact}">Some name</td>
