@@ -10,17 +10,19 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Ex {
+public class Excavator {
 
     private String type;
     private String driver_name;
     private String typeofWork;
+
     private double waste;
     private double wastePerKM;
     private double weightFact;
     private double weightNorm;
     private double distance;
     private List<Truck> trucks;
+
     private Timestamp timePlan;
     private Timestamp timeFact;
 

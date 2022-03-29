@@ -13,7 +13,7 @@ public class Waste {
 
     private double waste;
     private double wastePerMKM;
-    private List<Ex> ex;
+    private List<Excavator> excavators;
     private double weight_fact;
     private double weight_norm;
     private int day;

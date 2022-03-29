@@ -41,7 +41,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="exs : ${element.ex}">
+                <tr th:each="exs : ${element.excavator}">
                     <td th:text="${exs.type}"></td>
                     <td th:text="${exs.typeofWork}"></td>
                     <td th:text="${exs.distance}"></td>
@@ -61,12 +61,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="truckDTO : ${exs.truckDTOS}">
-                                <td th:text="${truckDTO.quantity}"></td>
-                                <td th:text="${truckDTO.name}"></td>
-                                <td th:text="${truckDTO.speed}"></td>
-                                <td th:text="${truckDTO.waste}"></td>
-                                <td th:text="${truckDTO.wastePerKM}"></td>
+                            <tr th:each="truckTypeDTO : ${exs.truckTypeDTOS}">
+                                <td th:text="${truckTypeDTO.quantity}"></td>
+                                <td th:text="${truckTypeDTO.name}"></td>
+                                <td th:text="${truckTypeDTO.speed}"></td>
+                                <td th:text="${truckTypeDTO.waste}"></td>
+                                <td th:text="${truckTypeDTO.wastePerKM}"></td>
                             </tr>
                             </tbody>
                         </table>

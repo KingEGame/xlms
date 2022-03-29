@@ -25,12 +25,12 @@
             </tr>
         </thead>
         <tbody>
-             <tr th:each="truckDTO: ${truckDTOS}">
-                <td th:text="${truckDTO.id}">id</td>
-                <td th:text="${truckDTO.carrying_capacity}">carrying_capacity</td>
-                <td th:text="${truckDTO.carring_capasity_opt}">carring_capasity_opt</td>
-                <td th:text="${truckDTO.volume}">volume</td>
-                <td th:text="${truckDTO.max_speed}">max_speed</td>
+             <tr th:each="truckTypeDTO: ${truckTypeDTOS}">
+                <td th:text="${truckTypeDTO.id}">id</td>
+                <td th:text="${truckTypeDTO.carrying_capacity}">carrying_capacity</td>
+                <td th:text="${truckTypeDTO.carring_capasity_opt}">carring_capasity_opt</td>
+                <td th:text="${truckTypeDTO.volume}">volume</td>
+                <td th:text="${truckTypeDTO.max_speed}">max_speed</td>
             </tr>
         </tbody>
     </table>

@@ -32,10 +32,10 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="object : ${items}">
-        <td th:text="${object.driver_name}">numSamosval</td>
-        <td th:text="${object.type}">typeSamosval</td>
-        <td th:text="${object.typeOfWork}">typeSamosval</td>
+    <tr th:each="excavator : ${items}">
+        <td th:text="${excavator.driver_name}"></td>
+        <td th:text="${excavator.type}"></td>
+        <td th:text="${excavator.typeofWork}"></td>
         <td >
             <table class="table">
                 <thead>
@@ -49,23 +49,23 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="truckDTO : ${object.truckDTOS}">
-                    <td th:text="${truckDTO.quantity}"></td>
-                    <td th:text="${truckDTO.name}"></td>
-                    <td th:text="${truckDTO.speed}"></td>
-                    <td th:text="${truckDTO.distance}"></td>
-                    <td th:text="${truckDTO.waste}"></td>
-                    <td th:text="${truckDTO.wastePerKM}"></td>
+                <tr th:each="truck : ${excavator.trucks}">
+                    <td th:text="${truck.count_truck}"></td>
+                    <td th:text="${truck.type_truck}"></td>
+                    <td th:text="${truck.speed}"></td>
+                    <td th:text="${truck.distance}"></td>
+                    <td th:text="${truck.waste_truck}"></td>
+                    <td th:text="${truck.waste_truck * 50}"></td>
                 </tr>
                 </tbody>
             </table>
         </td>
-        <td th:text="${object.weight_fact}">typeSamosval</td>
-        <td th:text="${object.weight_norm}">reise</td>
-        <td th:text="${#numbers.formatDecimal((object.weight_fact-object.weight_norm)/object.weight_norm * 100.0,0,3)}">reise</td>
-        <td th:text="${object.distance}">numEx</td>
-        <td th:text="${object.gas}">numEx</td>
-        <td th:text="${object.gas * 50}">numEx</td>
+        <td th:text="${excavator.weightFact}">typeSamosval</td>
+        <td th:text="${excavator.weightNorm}">reise</td>
+        <td th:text="${#numbers.formatDecimal((excavator.weightFact-excavator.weightNorm)/excavator.weightNorm * 100.0,0,3)}">reise</td>
+        <td th:text="${excavator.distance}">numEx</td>
+        <td th:text="${excavator.gas}">numEx</td>
+        <td th:text="${excavator.gas * 50}">numEx</td>
     </tr>
     </tbody>
 </table>

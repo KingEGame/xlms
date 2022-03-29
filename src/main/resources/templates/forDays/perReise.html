@@ -34,14 +34,14 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="object : ${items}">
-        <td th:text="${object.reise}">numSamosval</td>
-        <td th:text="${object.speedWithWeith}">numSamosval</td>
-        <td th:text="${object.inHours}">nameDriverSamosval</td>
-        <td th:text="${object.time}">typeSamosval</td>
-        <td th:text="${object.gasoline}">reise</td>
-        <td th:text="${object.distance}">numEx</td>
-        <td th:text="${object.gasoline*50}">numEx</td>
+    <tr th:each="truck : ${items}">
+        <td th:text="${truck.reise}">numSamosval</td>
+        <td th:text="${truck.speedWithWeith}">numSamosval</td>
+        <td th:text="${truck.inHours}">nameDriverSamosval</td>
+        <td th:text="${truck.time}">typeSamosval</td>
+        <td th:text="${truck.gasoline}">reise</td>
+        <td th:text="${truck.distance}">numEx</td>
+        <td th:text="${truck.gasoline*50}">numEx</td>
     </tr>
     </tbody>
 </table>

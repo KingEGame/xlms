@@ -8,8 +8,8 @@
 
     <input type="submit" th:method="get" value="home">
 
-    <select th:each="truckDTO: ${truks}">
-        <option th:each="${truckDTO.name}">name</option>
+    <select th:each="truckTypeDTO: ${truks}">
+        <option th:each="${truckTypeDTO.name}">name</option>
     </select>
 
     <table>
@@ -22,8 +22,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="object ${#objects}">
-                <td th:each="${object}"></td>
+            <tr th:each="truckTripsDTO ${#truckTripsDTOS}">
+                <td th:each="${truckTripsDTO}"></td>
             </tr>
         </tbody>
     </table>

@@ -1,7 +1,8 @@
 package kg.parser.blastmaker.xlms.respositiry;
 
-import kg.parser.blastmaker.xlms.objects.Object;
- import org.springframework.data.jpa.repository.JpaRepository;
+import kg.parser.blastmaker.xlms.objects.TruckTripsDTO;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
@@ -9,69 +10,109 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.*;
 
-public interface ObjectRespository extends JpaRepository<Object, Long> {
+public interface TruckTripsRespository extends JpaRepository<TruckTripsDTO, Long>, JpaSpecificationExecutor<TruckTripsDTO> {
 
  @Modifying
- @Query(value = "SELECT * FROM object u WHERE u.type_of_work = ?1 order by u.time_of_come_loading", nativeQuery = true)
- List<Object> findObjectByTypeOfWork(String typeofwork);
+ @Query(value = "SELECT *\n" +
+         "FROM trucktrip u\n" +
+         "    inner join typeofwork t on t.id = u.typeofwork_id\n" +
+         "WHERE t.work_name = ?1\n" +
+         "order by u.arrival_time", nativeQuery = true)
+ List<TruckTripsDTO> findObjectByTypeOfWork(String typeofwork);
 
  @Modifying
- @Query(value = "SELECT * FROM object u WHERE u.type_of_work = ?1 and date(u.time_of_come_loading) = date(?2) order by u.time_of_come_loading", nativeQuery = true)
- List<Object> findObjectByTypeOfWorkAndTime(String typeofwork, Timestamp date);
+ @Query(value = "SELECT *\n" +
+         "FROM trucktrip u\n" +
+         "    inner join typeofwork t on t.id = u.typeofwork_id\n" +
+         "WHERE t.work_name = ?1 and date(u.arrival_time) = date(?2)\n" +
+         "order by u.arrival_time", nativeQuery = true)
+ List<TruckTripsDTO> findObjectByTypeOfWorkAndTime(String typeofwork, Timestamp date);
 
  @Modifying
- @Query(value = "SELECT * FROM object u order by u.time_of_come_loading", nativeQuery = true)
- List<Object> findAllOrderBy();
+ @Query(value = "SELECT * FROM trucktrip u order by u.arrival_time", nativeQuery = true)
+ List<TruckTripsDTO> findAllOrderBy();
 
  @Modifying
- @Query(value = "SELECT * FROM object u  WHERE date(u.time_of_come_loading) = date(?1) order by u.time_of_come_loading", nativeQuery = true)
- List<Object> findByTimeOfComeLoading( Timestamp time_of_come_loading2);
+ @Query(value = "SELECT * FROM trucktrip u  WHERE date(u.arrival_time) = date(?1) order by u.arrival_time", nativeQuery = true)
+ List<TruckTripsDTO> findByTimeOfComeLoading(Timestamp time_of_come_loading2);
 
  @Modifying
- @Query(value = "SELECT * FROM object WHERE date(time_of_come_loading) = date(?1) and num_samosval = ?2 order by reise", nativeQuery = true)
- List<Object> findByTimeOfComeLoadingaAndNumSamosval( Timestamp time_of_come_loading2,Integer num_samosval);
+ @Query(value = "SELECT * FROM trucktrip \n" +
+         "inner join truck t on t.id = trucktrip.truck_id\n" +
+         "WHERE date(arrival_time) = date(?1) and t.number = ?2 \n" +
+         "order by trip_number", nativeQuery = true)
+ List<TruckTripsDTO> findByTimeOfComeLoadingaAndNumSamosval(Timestamp time_of_come_loading2, Integer num_samosval);
 
  @Modifying
- @Query(value = "select  date(time_of_come_loading) as d from object group by d order by d", nativeQuery = true)
+ @Query(value = "select date(arrival_time) as d from trucktrip group by d order by d", nativeQuery = true)
  List<Date> findAllDateTime();
 
  @Modifying
- @Query(value = "SELECT count(num_samosval) FROM object WHERE date(time_of_come_loading) = ?1 and type_samosval = ?2 group by num_samosval", nativeQuery = true)
+ @Query(value = "select t.number from trucktrip\n" +
+         "inner join truck t on t.id = trucktrip.truck_id\n" +
+         "inner join trucktype t2 on t.trucktype_id = t2.id\n" +
+         "WHERE date(arrival_time) = ?1 and t2.name = ?2\n" +
+         "group  by t.number", nativeQuery = true)
  List<Integer> findCountSamosvalbyDateAndType(Timestamp time_of_come_loading2, String type_samosval);
 
  @Modifying
- @Query(value = "select type_of_work from object group by type_of_work", nativeQuery = true)
- List<String> findAllTypeOfWork();
-
- @Modifying
- @Query(value = "select num_samosval from object where date(time_of_come_loading) = date(?1) group by num_samosval", nativeQuery = true)
+ @Query(value = "select t.number from trucktrip \n" +
+         "inner join truck t on t.id = trucktrip.truck_id\n" +
+         "where date(arrival_time) = date(?1) \n" +
+         "group by t.number", nativeQuery = true)
  List<Integer> findNums(Timestamp date);
 
- @Query(value = "select max(reise) from object where date(time_of_come_loading) = ?1 and num_samosval = ?2", nativeQuery = true)
- Integer getMaxReise(Timestamp date, Integer num);
+ @Query(value = "select max(trip_number) from trucktrip \n" +
+         "inner join truck t on t.id = trucktrip.truck_id\n" +
+         "where date(arrival_time) = ?1 and t.number= ?2;", nativeQuery = true)
+ Integer getMaxReise(Date date, Integer num);
 
- @Query(value = "SELECT name_ex FROM object WHERE date(time_of_come_loading) = ?1 and num_ex = ?2 group by name_ex", nativeQuery = true)
+ @Query(value = "SELECT e.name FROM trucktrip \n" +
+         "inner join excavator e on e.id = trucktrip.excavator_id\n" +
+         "WHERE date(arrival_time) = date(?1) and e.name = ?2 \n" +
+         "group by e.name", nativeQuery = true)
     List<String> findCountEx(Timestamp date, String ex);
 
- @Query(value = "select count(reise) from object where date(time_of_come_loading) = date(?1) group by reise", nativeQuery = true)
+ @Query(value = "select count(trip_number) from trucktrip where date(arrival_time) = date(?1) group by trip_number", nativeQuery = true)
  List<Integer> findbyReise(Timestamp time);
 
- @Query(value = "select name_ex from object where date(time_of_come_loading) = ?1 group by name_ex" , nativeQuery = true)
+ @Query(value = "select e.name from trucktrip\n" +
+         "inner join excavator e on e.id = trucktrip.excavator_id\n" +
+         "where date(arrival_time) = ?1\n" +
+         "group by e.name" , nativeQuery = true)
  List<String> AllNameExByDay(Timestamp time);
 
- @Query(value = "select * from object  where date(time_of_come_loading) = ?1 and name_ex = ?2 order by time_of_come_loading" , nativeQuery = true)
- List<Object> findAllObjectByEx(Timestamp time, String name);
+ @Query(value = "select * from trucktrip\n" +
+         " inner join excavator e on e.id = trucktrip.excavator_id\n" +
+         "where date(arrival_time) = ?1 and e.name = ?2 \n" +
+         "order by arrival_time" , nativeQuery = true)
+ List<TruckTripsDTO> findAllObjectByEx(Timestamp time, String name);
 
- @Query(value = "select type_samosval from object where date(time_of_come_loading) = ?1 and name_ex = ?2 group by type_samosval" , nativeQuery = true)
+ @Query(value = "select t2.name from trucktrip\n" +
+         "inner join excavator e on e.id = trucktrip.excavator_id\n" +
+         "inner join truck t on t.id = trucktrip.truck_id\n" +
+         "inner join trucktype t2 on t.trucktype_id = t2.id\n" +
+         "where date(arrival_time) = ?1 and e.name = ?2 \n" +
+         "group by t2.name" , nativeQuery = true)
  List<String> findAllTypeSamsvalByNameEx(Timestamp time, String name);
 
- @Query(value = "select count(num_samosval) from object where date(time_of_come_loading) = ?1 and name_ex = ?2 and type_samosval = ?3 group by num_samosval" , nativeQuery = true)
+ @Query(value = "select count(t.number) from trucktrip\n" +
+         "inner join truck t on t.id = trucktrip.truck_id\n" +
+         "inner join excavator e on e.id = trucktrip.excavator_id\n" +
+         "inner join trucktype t2 on t2.id = t.trucktype_id\n" +
+         "where date(arrival_time) = ?1 and e.name = ?2 and t2.name = ?3\n" +
+         "group by t.number;" , nativeQuery = true)
  List<Integer> findQuantitySamByEx(Timestamp time, String name, String type);
 
- @Query(value ="select num_ex from object group by num_ex", nativeQuery = true)
+ @Query(value ="select e.name from trucktrip\n" +
+         "inner join excavator e on e.id = trucktrip.excavator_id\n" +
+         "group by e.name;", nativeQuery = true)
  List<String> getAllTypeExs();
 
- @Query(value = "select type_samosval from object group by type_samosval",nativeQuery = true )
+ @Query(value = "select t2.name from trucktrip\n" +
+         "inner join truck t on t.id = trucktrip.truck_id\n" +
+         "inner join trucktype t2 on t2.id = t.trucktype_id\n" +
+         "group by t2.name",nativeQuery = true )
  List<String> getAllTypeSamosval();
 
 
@@ -198,18 +239,25 @@ public interface ObjectRespository extends JpaRepository<Object, Long> {
   * Для взятия данных о дне с определенным вида самосвалом, где берется самосвал с самым большим количеством рейсов
   * */
  @Query(value = "SELECT *\n" +
-         "FROM object g\n" +
-         "WHERE date(g.time_of_come_loading) = date(?1)\n" +
-         "    and g.num_samosval = (select o.num_samosval\n" +
-                                   "from object o\n" +
-                                   "where date(o.time_of_come_loading) = date(?1) and o.type_samosval = ?2\n" +
-                                   "group by o.num_samosval\n" +
-                                   "order by (select count(n.reise)\n" +
-                                   "          from object n\n" +
-                                   "          where date(n.time_of_come_loading) = date(?1) and n.type_samosval = ?2 and n.num_samosval = o.num_samosval) desc\n" +
-                                   "limit 1)\n" +
-         "order by g.reise", nativeQuery = true)
- List<Object> getObjectsByDateAndByTypeTruck(Timestamp time, String typeTruck);
+         "FROM trucktrip g\n" +
+         "inner join excavator e on e.id = g.excavator_id\n" +
+         "inner join truck t on t.id = g.truck_id\n" +
+         "inner join trucktype t2 on t2.id = t.trucktype_id\n" +
+         "WHERE date(g.arrival_time) = date(?1)\n" +
+         "  and t.number = (select t4.number\n" +
+         "                        from trucktrip o\n" +
+         "                            inner join truck t4 on o.truck_id\n" +
+         "                            inner join trucktype t3 on t3.id = t4.trucktype_id\n" +
+         "                        where date(o.arrival_time) = date(?1) and t3.name = ?2\n" +
+         "                        group by t4.number\n" +
+         "                        order by (select count(n.trip_number)\n" +
+         "                                  from trucktrip n\n" +
+         "                                    inner join truck t6 on t6.id = n.truck_id\n" +
+         "                                    inner join trucktype t8 on t6.trucktype_id =t8.id\n" +
+         "                                  where date(n.arrival_time) = date(?1) and t8.name = ?2 and t6.number = t4.number) desc\n" +
+         "                        limit 1)\n" +
+         "order by g.trip_number", nativeQuery = true)
+ List<TruckTripsDTO> getObjectsByDateAndByTypeTruck(Timestamp time, String typeTruck);
 
 
 // @Query(value = "select type_of_work from object group by type_of_work", nativeQuery = true)

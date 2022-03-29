@@ -1,12 +1,11 @@
 package kg.parser.blastmaker.xlms.report;
 
-import kg.parser.blastmaker.xlms.model.Ex;
+import kg.parser.blastmaker.xlms.model.Excavator;
 import kg.parser.blastmaker.xlms.model.Truck;
 import kg.parser.blastmaker.xlms.model.Month;
 import kg.parser.blastmaker.xlms.model.PerReice;
-import kg.parser.blastmaker.xlms.objects.Object;
-import kg.parser.blastmaker.xlms.objects.TruckDTO;
-import kg.parser.blastmaker.xlms.service.ObjectService;
+import kg.parser.blastmaker.xlms.objects.TruckTripsDTO;
+import kg.parser.blastmaker.xlms.respositiry.*;
 import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,29 @@ import java.util.List;
 public class OriginalData {
 
     @Autowired
-    private ObjectService objectService;
+    TruckTripsRespository truckTripsRespository;
+
+    @Autowired
+    ExcavatorDriverRepository excavatorDriverRepository;
+
+    @Autowired
+    ExcavatorRepository excavatorRepository;
+
+    @Autowired
+    TruckDriverRepository truckDriverRepository;
+
+    @Autowired
+    TruckTypeRepository truckTypeRepository;
+
+    @Autowired
+    TruckRepository truckRepository;
+
+    @Autowired
+    TypeOfWorkRepository typeOfWorkRepository;
+
+    @Autowired
+    UnloadPointRepository unloadPointRepository;
+
 
 
     /**
@@ -35,71 +56,70 @@ public class OriginalData {
     public HashMap<Integer, Month> month(String type){
         HashMap<Integer, Month> month = new HashMap<>();
 
-      int days = 1;
-      double distance = 0;
-      int gas = 0;
-      List<String> trucks = new ArrayList<>();
-      List<String> exs = new ArrayList<>();
-      long weightFact = 0;
-      double weightNorm = 0;
+        int days = 1;
+        double distance = 0;
+        int gas = 0;
+        List<String> trucks = new ArrayList<>();
+        List<String> exs = new ArrayList<>();
+        long weightFact = 0;
+        double weightNorm = 0;
+
+        List<Timestamp> dates = new ArrayList<>();
+        for(Date date : truckTripsRespository.findAllDateTime()){
+            dates.add(new Timestamp(date.getTime()));
+        }
+
+        for(Timestamp date : dates){
+            List<TruckTripsDTO> truckTripsDTOS;
+            if(type.equals("")) {
+                truckTripsDTOS = truckTripsRespository.findByTimeOfComeLoading(date);
+            }else {
+                truckTripsDTOS = truckTripsRespository.findObjectByTypeOfWorkAndTime(type, date);
+            }
+            for(TruckTripsDTO truckTripsDTO : truckTripsDTOS){
+                distance += truckTripsDTO.getTrip_distance();
+                gas += Math.abs(truckTripsDTO.getFuel_at_loading() - truckTripsDTO.getFuel_at_unloading());
+                if(!trucks.contains(truckTripsDTO.getTruck().getTruckTypeDTO().getName()))
+                    trucks.add(truckTripsDTO.getTruck().getTruckTypeDTO().getName());
+                if(!exs.contains(truckTripsDTO.getExcavator().getName())){
+                    exs.add(truckTripsDTO.getExcavator().getName());
+                }
+                weightFact += truckTripsDTO.getActual_weight();
+                weightNorm += truckTripsDTO.getTruck().getTruckTypeDTO().getRated_load();
+            }
+
+            List<String> temp_trucks = new ArrayList<>(trucks);
+            trucks.clear();
+            for(String str : temp_trucks){
+                int count = truckTripsRespository.findCountSamosvalbyDateAndType(date, str).size();
+                trucks.add(str+" - "+count);
+            }
+
+            List<String> temp_exs = new ArrayList<>(exs);
+            exs.clear();
+            for(String ex : temp_exs){
+                int count = truckTripsRespository.findCountEx(date, ex).size();
+                exs.add(ex+" - "+count);
+            }
 
 
-      List<Timestamp> dates = new ArrayList<>();
-      for(Date date : objectService.getAllDate()){
-          dates.add(new Timestamp(date.getTime()));
-      }
-
-      for(Timestamp date : dates){
-          List<Object> objects;
-          if(type.equals("")) {
-              objects = objectService.findByTimeOfComeLoading(date);
-          }else {
-              objects = objectService.getBytimeAndType(type, date);
-          }
-          for(Object object: objects){
-              distance += object.getDistance();
-              gas += Math.abs(object.getGasForBeginLoading() - object.getGasForBeginUnloading());
-              if(!trucks.contains(object.getTypeSamosval()))
-                  trucks.add(object.getTypeSamosval());
-              if(!exs.contains(object.getNumEx())){
-                  exs.add(object.getNumEx());
-              }
-              weightFact += object.getWeightFact();
-              weightNorm += object.getWeightNorm();
-          }
-
-          List<String> temp_trucks = new ArrayList<>(trucks);
-          trucks.clear();
-          for(String str : temp_trucks){
-              int count = objectService.getCountSamosvalByTimeAndType(date, str);
-              trucks.add(str+" - "+count);
-          }
-
-          List<String> temp_exs = new ArrayList<>(exs);
-          exs.clear();
-          for(String ex : temp_exs){
-              int count = objectService.getCountEx(date, ex);
-              exs.add(ex+" - "+count);
-          }
-
-
-          month.put(days, Month.builder()
-                  .trucks(new ArrayList<>(trucks))
-                  .exs(new ArrayList<>(exs))
-                  .distance(Precision.round(distance, 3))
-                  .gas(gas)
-                  .quantityReise(objectService.getReises(date))
-                  .weightFact(weightFact)
-                  .weightNorm(Precision.round(weightNorm, 3))
-                  .build());
-          days++;
-          distance = 0;
-          gas = 0;
-          trucks.clear();
-          exs.clear();
-          weightFact = 0;
-          weightNorm = 0;
-      }
+            month.put(days, Month.builder()
+                    .trucks(new ArrayList<>(trucks))
+                    .exs(new ArrayList<>(exs))
+                    .distance(Precision.round(distance, 3))
+                    .gas(gas)
+                    .quantityReise(truckTripsRespository.findbyReise(date).size())
+                    .weightFact(weightFact)
+                    .weightNorm(Precision.round(weightNorm, 3))
+                    .build());
+            days++;
+            distance = 0;
+            gas = 0;
+            trucks.clear();
+            exs.clear();
+            weightFact = 0;
+            weightNorm = 0;
+        }
 
         return month;
     }
@@ -107,31 +127,37 @@ public class OriginalData {
     public List<Truck> perDayByTruck(int days){
         List<Truck> views = new ArrayList<>();
 
-        List<Integer> nums = objectService.getNums(new Timestamp(objectService.getAllDate().get(days-1).getTime()));
+        List<Integer> nums = truckTripsRespository.findNums(new Timestamp(truckTripsRespository.findAllDateTime().get(days-1).getTime()));
 
         for(Integer num : nums) {
-            List<Object> orderByNum = objectService.findByTimeOfComeLoadingaAndNumSamosval(new Timestamp(objectService.getAllDate().get(days - 1).getTime()), num);
+            List<TruckTripsDTO> orderByNum = truckTripsRespository.findByTimeOfComeLoadingaAndNumSamosval(new Timestamp(truckTripsRespository.findAllDateTime().get(days - 1).getTime()), num);
 
             double speed = 0;
             double coust_gas = 0;
-            for(Object ob : orderByNum){
+            for(TruckTripsDTO ob : orderByNum){
+
+                if(ob.getFuel_at_loading() - ob.getFuel_at_unloading() <= 0){
+                    continue;
+                }
+
                 double hours;
 
-                Duration time = Duration.between(ob.getTimeOfComeLoading().toInstant(), ob.getTimeOfBeginUnloading().toInstant());
+                Duration time = Duration.between(ob.getArrival_time().toInstant(), ob.getBegin_unloading().toInstant());
 
                 hours = (double) time.getSeconds() / 3600;
 
-                speed += ob.getDistance()/hours;
-                coust_gas += Math.abs(ob.getGasForBeginLoading() - ob.getGasForBeginUnloading());
+                speed += ob.getTrip_distance()/hours;
+                coust_gas += ob.getFuel_at_loading() - ob.getFuel_at_unloading();
             }
 
             views.add(Truck.builder()
-                    .count(objectService.getMaxReise(new Timestamp(objectService.getAllDate().get(days-1).getTime()), num))
-                    .model(orderByNum.get(0).getTypeSamosval())
-                    .ex(orderByNum.get(0).getNumEx())
-                    .num(num)
-                    .avg_speed(Precision.round(speed / orderByNum.size(), 6))
-                    .avg_waste_gas(Precision.round(coust_gas / orderByNum.size(), 6))
+                    .count_reice(orderByNum.size())
+                    .type_truck(orderByNum.get(0).getTruck().getTruckTypeDTO().getName())
+                    .excavator_type_tie_with_truck(orderByNum.get(0).getExcavator().getName())
+                    .num_truck(num)
+                    .avg_speed_truck_for_reice(Precision.round(speed / orderByNum.size(), 6))
+                    .avg_waste_gas_for_reice(Precision.round(coust_gas / orderByNum.size(), 6))
+                    .waste_gas_truck(coust_gas)
                     .build());
 
         }
@@ -146,13 +172,13 @@ public class OriginalData {
      * @param day - день
      * @return список обьектов типа Ex
      */
-    public List<Ex> perDayByExes(int day){
-        List<Ex> views = new ArrayList<>();
+    public List<Excavator> perDayByExes(int day){
+        List<Excavator> views = new ArrayList<>();
 
-        List<String> nums = objectService.getEx(new Timestamp(objectService.getAllDate().get(day-1).getTime()));
+        List<String> nums = truckTripsRespository.AllNameExByDay(new Timestamp(truckTripsRespository.findAllDateTime().get(day-1).getTime()));
 
         for(String ex : nums) {
-            List<Object> orderByEx = objectService.getObjectsForDayByEx(new Timestamp(objectService.getAllDate().get(day - 1).getTime()), ex);
+            List<TruckTripsDTO> orderByEx = truckTripsRespository.findAllObjectByEx(new Timestamp(truckTripsRespository.findAllDateTime().get(day - 1).getTime()), ex);
 
             double speed = 0;
             double coust_gas = 0;
@@ -161,42 +187,73 @@ public class OriginalData {
             double distance = 0;
             String name = "";
             String typeOfWork = "";
-            int reice = 0;
-            for(Object ob : orderByEx){
+
+            List<Truck> tr_temp = new ArrayList<>();
+            List<String> trucks = new ArrayList<>();
+            for(TruckTripsDTO ob : orderByEx){
+
+
+                if(ob.getFuel_at_loading() - ob.getFuel_at_unloading() <=0){continue;}
+
                 double hours;
-
-                Duration time = Duration.between(ob.getTimeOfComeLoading().toInstant(), ob.getTimeOfBeginUnloading().toInstant());
-
-                if(ob.getGasForBeginLoading() - ob.getGasForBeginUnloading() <=0){
-                    continue;
-                }
+                Duration time = Duration.between(ob.getArrival_time().toInstant(), ob.getBegin_unloading().toInstant());
                 hours = (double) time.getSeconds() / 3600;
 
-                speed += ob.getDistance()/hours;
-                coust_gas += ob.getGasForBeginLoading() - ob.getGasForBeginUnloading();
-                weight_fact += ob.getWeightFact();
-                weight_norm += ob.getWeightNorm();
-                distance += ob.getDistance();
-                name = ob.getNumEx();
-                typeOfWork = ob.getTypeOfWork();
-                reice++;
+                coust_gas += ob.getFuel_at_loading() - ob.getFuel_at_unloading();
+                weight_fact += ob.getActual_weight();
+                weight_norm += ob.getTruck().getTruckTypeDTO().getRated_load();
+                distance += ob.getTrip_distance();
+
+                if(!trucks.contains(ob.getTruck().getTruckTypeDTO().getName())) {
+                    trucks.add(ob.getTruck().getTruckTypeDTO().getName());
+                    tr_temp.add(Truck.builder()
+                            .num_truck(ob.getTruck().getNumber())
+                            .type_truck(ob.getTruck().getTruckTypeDTO().getName())
+                            .distance(ob.getTrip_distance())
+                            .waste_gas_truck(ob.getFuel_at_loading() - ob.getFuel_at_unloading())
+                            .speed(ob.getTrip_distance()/hours)
+                            .count_truck(truckTripsRespository.findQuantitySamByEx(new Timestamp(truckTripsRespository.findAllDateTime().get(day - 1).getTime()), ex, ob.getTruck().getTruckTypeDTO().getName()).size())
+                            .driver_name_truck(ob.getTruckdriver().getName())
+                            .count_reice(1)
+                            .type_of_work(ob.getTypeOfWork().getWork_name())
+                            .build());
+
+                }else{
+                    tr_temp.forEach((e) -> {
+                        if ( e.getType_truck().equals(ob.getTruck().getTruckTypeDTO().getName())) {
+                                e.setDistance(e.getDistance()+ob.getTrip_distance());
+                                e.setSpeed(e.getSpeed()+ (ob.getTrip_distance()/hours));
+                                e.setCount_reice(e.getCount_reice()+1);
+                                if(!e.getType_of_work().equals(ob.getTypeOfWork().getWork_name())) {
+                                    e.setType_of_work(ob.getTypeOfWork().getWork_name());
+                                }
+                        }
+                    });
+                }
+
             }
 
-            List<String> trucks = objectService.getTypesOfSamByexForDay(new Timestamp(objectService.getAllDate().get(day - 1).getTime()), ex);
-            List<kg.parser.blastmaker.xlms.model.Truck> tr_temp = new ArrayList<>(trucks.size());
 
-            for(String tr : trucks){
-                tr_temp.add(kg.parser.blastmaker.xlms.model.Truck.builder().reice(reice).weight_fact(weight_fact).weight_norm(weight_norm).speed(Precision.round(speed/orderByEx.size(), 3)).quantity(objectService.getQuantityTruckFromExForDay(new Timestamp(objectService.getAllDate().get(day - 1).getTime()), ex, tr)).name(tr).distance(Precision.round(distance,3)).build());
+            for (Truck truck : tr_temp){
+                truck.setSpeed(truck.getSpeed()/truck.getCount_reice());
+                typeOfWork += truck.getType_of_work()+"\n";
             }
 
-            views.add(Ex.builder()
-                    .type(name)
-                    .driver_name(ex)
-                            .weight_fact_avarage(weight_fact/orderByEx.size())
-                            .weight_norm_avarage(weight_norm/orderByEx.size())
-                            .typeofWork(typeOfWork)
+//            List<String> trucks = truckTripsRespository.findAllTypeSamsvalByNameEx(new Timestamp(truckTripsRespository.findAllDateTime().get(day - 1).getTime()), ex);
+//            List<kg.parser.blastmaker.xlms.model.Truck> tr_temp = new ArrayList<>(trucks.size());
+//
+//            for(String tr : trucks){
+//                tr_temp.add(kg.parser.blastmaker.xlms.model.Truck.builder().count_reice(reice).weight_fact(weight_fact).weight_norm(weight_norm).speed(Precision.round(speed/orderByEx.size(), 3)).count_truck(truckTripsRespository.findQuantitySamByEx(new Timestamp(truckTripsRespository.findAllDateTime().get(day - 1).getTime()), ex, tr).size()).type_truck(tr).distance(Precision.round(distance,3)).build());
+//            }
+
+            views.add(Excavator.builder()
+                    .type(orderByEx.get(0).getExcavator().getName())
+                    .driver_name(orderByEx.get(0).getExcavatorDriver().getName())
+                    .weight_fact_avarage(weight_fact/orderByEx.size())
+                    .weight_norm_avarage(weight_norm/orderByEx.size())
+                    .typeofWork(typeOfWork)
                     .speed(speed/orderByEx.size())
-                            .timeInHours(distance/speed)
+                    .timeInHours(distance/speed)
                     .trucks(new ArrayList<>(tr_temp))
                     .weight_fact(weight_fact)
                     .weight_norm(Precision.round(weight_norm, 6))
@@ -222,29 +279,29 @@ public class OriginalData {
     public List<PerReice> perReice(int days, int num){
         List<PerReice> perReises = new ArrayList<>();
 
-        List<Object> objects = objectService.findByTimeOfComeLoadingaAndNumSamosval(new Timestamp(objectService.getAllDate().get(days - 1).getTime()), num);
+        List<TruckTripsDTO> truckTripsDTOS = truckTripsRespository.findByTimeOfComeLoadingaAndNumSamosval(new Timestamp(truckTripsRespository.findAllDateTime().get(days - 1).getTime()), num);
 
-        for(Object ob : objects){
+        for(TruckTripsDTO ob : truckTripsDTOS){
             double hours;
 
-            Duration time = Duration.between(ob.getTimeOfComeLoading().toInstant(), ob.getTimeOfBeginUnloading().toInstant());
+            Duration time = Duration.between(ob.getArrival_time().toInstant(), ob.getBegin_unloading().toInstant());
 
             hours = (double) time.getSeconds() / 3600;
 
-            double speed = ob.getDistance()/hours;
-            double gasoline = Math.abs(ob.getGasForBeginLoading() - ob.getGasForBeginUnloading());
+            double speed = ob.getTrip_distance()/hours;
+            double gasoline = Math.abs(ob.getFuel_at_loading() - ob.getFuel_at_unloading());
 
             perReises.add(PerReice.builder()
-                    .distance(ob.getDistance())
+                    .distance(ob.getTrip_distance())
                     .gasoline(gasoline)
                     .inHours(Precision.round(hours, 6))
                     .time(new Time( (int)time.getSeconds() / 3600,(int)(time.getSeconds() - (time.getSeconds() / 3600) *3600) / 60, (int) (time.getSeconds() - (((time.getSeconds() - (time.getSeconds() / 3600) *3600) / 60)*60) )))
-                    .model_truck(ob.getTypeSamosval())
-                    .name_driver(ob.getNameDriverSamosval())
-                    .ex(ob.getNumEx())
-                    .ex_driver(ob.getNameEx())
-                    .reise(ob.getReise())
-                    .num(ob.getNumSamosval())
+                    .model_truck(ob.getTruck().getTruckTypeDTO().getName())
+                    .name_driver(ob.getTruckdriver().getName())
+                    .ex(ob.getExcavator().getName())
+                    .ex_driver(ob.getExcavatorDriver().getName())
+                    .reise(ob.getTrip_number())
+                    .num(ob.getTruck().getNumber())
                     .speedWithWeith(Precision.round(speed,6))
                     .build());
         }

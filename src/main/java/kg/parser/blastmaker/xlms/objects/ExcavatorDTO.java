@@ -3,6 +3,8 @@ package kg.parser.blastmaker.xlms.objects;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -10,8 +12,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "ex")
-public class Excavator {
+@Table(name = "excavator")
+public class ExcavatorDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

@@ -32,26 +32,26 @@
             </tr>
         </thead>
         <tbody>
-        <tr th:each="object: ${objects}">
-            <td th:text="${object.id}">id</td>
-            <td th:text="${object.numSamosval}">numSamosval</td>
-            <td th:text="${object.nameDriverSamosval}">nameDriverSamosval</td>
-            <td th:text="${object.typeSamosval}">typeSamosval</td>
-            <td th:text="${object.reise}">reise</td>
-            <td th:text="${object.numEx}">numEx</td>
-            <td th:text="${object.nameEx}">nameEx</td>
-            <td th:text="${object.timeOfComeLoading}">timeOfComeLoading</td>
-            <td th:text="${object.timeOfBeginLoading}">timeOfBeginLoading</td>
-            <td th:text="${object.timeOfLoading}">timeOfLoading</td>
-            <td th:text="${object.distance}">distance</td>
-            <td th:text="${object.weightFact}">weightFact</td>
-            <td th:text="${object.weightNorm}">weightNorm</td>
-            <td th:text="${object.typeOfWork}">typeOfWork</td>
-            <td th:text="${object.placeToUnloading}">placeToUnloading</td>
-            <td th:text="${object.timeOfBeginUnloading}">timeOfBeginUnloading</td>
-            <td th:text="${object.timeOfUnloading}">timeOfUnloading</td>
-            <td th:text="${object.gasForBeginLoading}">gasForBeginLoading</td>
-            <td th:text="${object.gasForBeginUnloading}">gasForBeginUnloading</td>
+        <tr th:each="truckTripsDTO: ${truckTripsDTOS}">
+            <td th:text="${truckTripsDTO.id}">id</td>
+            <td th:text="${truckTripsDTO.numSamosval}">numSamosval</td>
+            <td th:text="${truckTripsDTO.nameDriverSamosval}">nameDriverSamosval</td>
+            <td th:text="${truckTripsDTO.typeSamosval}">typeSamosval</td>
+            <td th:text="${truckTripsDTO.reise}">reise</td>
+            <td th:text="${truckTripsDTO.numEx}">numEx</td>
+            <td th:text="${truckTripsDTO.nameEx}">nameEx</td>
+            <td th:text="${truckTripsDTO.timeOfComeLoading}">timeOfComeLoading</td>
+            <td th:text="${truckTripsDTO.timeOfBeginLoading}">timeOfBeginLoading</td>
+            <td th:text="${truckTripsDTO.timeOfLoading}">timeOfLoading</td>
+            <td th:text="${truckTripsDTO.distance}">distance</td>
+            <td th:text="${truckTripsDTO.weightFact}">weightFact</td>
+            <td th:text="${truckTripsDTO.weightNorm}">weightNorm</td>
+            <td th:text="${truckTripsDTO.typeOfWork}">typeOfWork</td>
+            <td th:text="${truckTripsDTO.placeToUnloading}">placeToUnloading</td>
+            <td th:text="${truckTripsDTO.timeOfBeginUnloading}">timeOfBeginUnloading</td>
+            <td th:text="${truckTripsDTO.timeOfUnloading}">timeOfUnloading</td>
+            <td th:text="${truckTripsDTO.gasForBeginLoading}">gasForBeginLoading</td>
+            <td th:text="${truckTripsDTO.gasForBeginUnloading}">gasForBeginUnloading</td>
         </tr>
         </tbody>
     </table>

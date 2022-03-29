@@ -23,15 +23,15 @@
         </tr>
     </thead>
     <tbody>
-        <tr th:each="object : ${items}">
-            <td th:text="${object.num}">numSamosval</td>
-            <td th:text="${object.model}">typeSamosval</td>
-            <td th:text="${object.ex}">typeEx</td>
-            <td th:text="${object.count}">typeSamosval</td>
-            <td th:text="${object.avg_speed}">reise</td>
-            <td th:text="${object.avg_waste_gas}">numEx</td>
-            <td th:text="${#numbers.formatDecimal(object.avg_waste_gas * 50, 0, 6)}">numEx</td>
-            <td><a th:href="@{|../day/${day}/num/${object.num}|}">По каждому рейсу</a> </td>
+        <tr th:each="truck : ${items}">
+            <td th:text="${truck.num_truck}"></td>
+            <td th:text="${truck.type_truck}"></td>
+            <td th:text="${truck.excavator_type_tie_with_truck}"></td>
+            <td th:text="${truck.count_reice}">typeSamosval</td>
+            <td th:text="${truck.avg_speed_truck_for_reice}"></td>
+            <td th:text="${truck.avg_waste_gas_for_reice}"></td>
+            <td th:text="${#numbers.formatDecimal(truck.avg_waste_gas_for_reice * 50, 0, 6)}"></td>
+            <td><a th:href="@{|../day/${day}/num/${truck.num_truck}|}">По каждому рейсу</a> </td>
         </tr>
     </tbody>
 </table>

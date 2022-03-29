@@ -1,9 +1,10 @@
 package kg.parser.blastmaker.xlms.objects;
 
-
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -13,33 +14,17 @@ import javax.persistence.*;
 @Entity
 @Table(name = "truck")
 public class TruckDTO {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-   @Column(unique = true)
-    private String name;
+    private int number;
 
-    private double carrying_capacity_norm;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name ="trucktype_id",referencedColumnName = "id")
+    private TruckTypeDTO truckTypeDTO;
 
-    private double carrying_capacity_max;
-
-    private double volume;
-
-    private double max_speed;
-
-    private double carring_capasity_opt;
-
-    private double optimal_speed;
-
-    private double waste_gas_for_reise;
-
-    private double normal_weight;
-
-    private double specific_waste_gas;
-
-    public boolean equals(TruckDTO o){
-        return o.name.equals(name);
+    public boolean equal(int num){
+        return number == num;
     }
 }
