@@ -18,8 +18,6 @@ public class Excavator {
 
     private double waste;
     private double wastePerKM;
-    private double weightFact;
-    private double weightNorm;
     private double distance;
     private List<Truck> trucks;
 

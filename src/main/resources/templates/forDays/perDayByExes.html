@@ -60,9 +60,9 @@
                 </tbody>
             </table>
         </td>
-        <td th:text="${excavator.weightFact}">typeSamosval</td>
-        <td th:text="${excavator.weightNorm}">reise</td>
-        <td th:text="${#numbers.formatDecimal((excavator.weightFact-excavator.weightNorm)/excavator.weightNorm * 100.0,0,3)}">reise</td>
+        <td th:text="${excavator.weight_fact}">typeSamosval</td>
+        <td th:text="${excavator.weight_norm}">reise</td>
+        <td th:text="${#numbers.formatDecimal((excavator.weight_fact-excavator.weight_norm)/excavator.weight_norm * 100.0,0,3)}">reise</td>
         <td th:text="${excavator.distance}">numEx</td>
         <td th:text="${excavator.gas}">numEx</td>
         <td th:text="${excavator.gas * 50}">numEx</td>

@@ -1,5 +1,7 @@
 package kg.parser.blastmaker.xlms.model;
 
+import kg.parser.blastmaker.xlms.objects.ExcavatorDTO;
+import kg.parser.blastmaker.xlms.objects.TruckTypeDTO;
 import lombok.*;
 
 import java.sql.Time;
@@ -27,11 +29,24 @@ public class Truck {
     private double cost_price;
     private String driver_name_truck;
     private String excavator_type_tie_with_truck;
+    private ExcavatorDTO excavatorDTO;
+    private TruckTypeDTO truckTypeDTO;
     private double avg_speed_truck_for_reice;
     private double avg_waste_gas_for_reice;
     private double waste_gas_truck;
     private String type_of_work;
+    private double weight;
     private List<PerReice> reices;
+
+    @Override
+    public boolean equals(Object obj) {
+        Truck temp = (Truck)obj;
+        return temp.type_truck.equals(type_truck);
+    }
+
+//    public boolean contains(Truck o){
+//        return type_truck.equals(o.getType_truck());
+//    }
 
     private class PerReice {
 

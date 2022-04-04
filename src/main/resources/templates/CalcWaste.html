@@ -41,12 +41,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="exs : ${element.excavator}">
+                <tr th:each="exs : ${element.excavators}">
                     <td th:text="${exs.type}"></td>
                     <td th:text="${exs.typeofWork}"></td>
                     <td th:text="${exs.distance}"></td>
-                    <td th:text="${exs.weightFact}"></td>
-                    <td th:text="${exs.weightNorm}"></td>
+                    <td th:text="${exs.weight_fact}"></td>
+                    <td th:text="${exs.weight_norm}"></td>
                     <td th:text="${exs.waste}"></td>
                     <td th:text="${exs.wastePerKM}"></td>
                     <td>
@@ -61,12 +61,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="truckTypeDTO : ${exs.truckTypeDTOS}">
-                                <td th:text="${truckTypeDTO.quantity}"></td>
-                                <td th:text="${truckTypeDTO.name}"></td>
-                                <td th:text="${truckTypeDTO.speed}"></td>
-                                <td th:text="${truckTypeDTO.waste}"></td>
-                                <td th:text="${truckTypeDTO.wastePerKM}"></td>
+                            <tr th:each="truck : ${exs.trucks}">
+                                <td th:text="${truck.count_truck}"></td>
+                                <td th:text="${truck.type_truck}"></td>
+                                <td th:text="${truck.speed}"></td>
+                                <td th:text="${truck.waste_truck}"></td>
+                                <td th:text="${truck.cost_price}"></td>
                             </tr>
                             </tbody>
                         </table>

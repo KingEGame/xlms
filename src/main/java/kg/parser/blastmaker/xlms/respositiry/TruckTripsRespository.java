@@ -246,7 +246,7 @@ public interface TruckTripsRespository extends JpaRepository<TruckTripsDTO, Long
          "WHERE date(g.arrival_time) = date(?1)\n" +
          "  and t.number = (select t4.number\n" +
          "                        from trucktrip o\n" +
-         "                            inner join truck t4 on o.truck_id\n" +
+         "                            inner join truck t4 on t4.id = o.truck_id\n" +
          "                            inner join trucktype t3 on t3.id = t4.trucktype_id\n" +
          "                        where date(o.arrival_time) = date(?1) and t3.name = ?2\n" +
          "                        group by t4.number\n" +

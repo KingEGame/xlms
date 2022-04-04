@@ -185,7 +185,6 @@ public class OriginalData {
             double weight_fact = 0;
             double weight_norm = 0;
             double distance = 0;
-            String name = "";
             String typeOfWork = "";
 
             List<Truck> tr_temp = new ArrayList<>();
@@ -209,11 +208,13 @@ public class OriginalData {
                     tr_temp.add(Truck.builder()
                             .num_truck(ob.getTruck().getNumber())
                             .type_truck(ob.getTruck().getTruckTypeDTO().getName())
-                            .distance(ob.getTrip_distance())
+                            .distance(Precision.round(ob.getTrip_distance(),3))
                             .waste_gas_truck(ob.getFuel_at_loading() - ob.getFuel_at_unloading())
-                            .speed(ob.getTrip_distance()/hours)
+                            .speed(Precision.round(ob.getTrip_distance()/hours,3))
                             .count_truck(truckTripsRespository.findQuantitySamByEx(new Timestamp(truckTripsRespository.findAllDateTime().get(day - 1).getTime()), ex, ob.getTruck().getTruckTypeDTO().getName()).size())
                             .driver_name_truck(ob.getTruckdriver().getName())
+                            .weight_fact(ob.getActual_weight())
+                            .weight_norm(Precision.round(ob.getTruck().getTruckTypeDTO().getRated_load(), 3))
                             .count_reice(1)
                             .type_of_work(ob.getTypeOfWork().getWork_name())
                             .build());
@@ -221,9 +222,11 @@ public class OriginalData {
                 }else{
                     tr_temp.forEach((e) -> {
                         if ( e.getType_truck().equals(ob.getTruck().getTruckTypeDTO().getName())) {
-                                e.setDistance(e.getDistance()+ob.getTrip_distance());
-                                e.setSpeed(e.getSpeed()+ (ob.getTrip_distance()/hours));
+                                e.setDistance(Precision.round(e.getDistance()+ob.getTrip_distance(),3));
+                                e.setSpeed(Precision.round(e.getSpeed()+ (ob.getTrip_distance()/hours),3));
                                 e.setCount_reice(e.getCount_reice()+1);
+                                e.setWeight_fact(ob.getActual_weight()+e.getWeight_fact());
+                                e.setWeight_norm(Precision.round(ob.getTruck().getTruckTypeDTO().getRated_load()+e.getWeight_norm(),3));
                                 if(!e.getType_of_work().equals(ob.getTypeOfWork().getWork_name())) {
                                     e.setType_of_work(ob.getTypeOfWork().getWork_name());
                                 }
@@ -239,20 +242,13 @@ public class OriginalData {
                 typeOfWork += truck.getType_of_work()+"\n";
             }
 
-//            List<String> trucks = truckTripsRespository.findAllTypeSamsvalByNameEx(new Timestamp(truckTripsRespository.findAllDateTime().get(day - 1).getTime()), ex);
-//            List<kg.parser.blastmaker.xlms.model.Truck> tr_temp = new ArrayList<>(trucks.size());
-//
-//            for(String tr : trucks){
-//                tr_temp.add(kg.parser.blastmaker.xlms.model.Truck.builder().count_reice(reice).weight_fact(weight_fact).weight_norm(weight_norm).speed(Precision.round(speed/orderByEx.size(), 3)).count_truck(truckTripsRespository.findQuantitySamByEx(new Timestamp(truckTripsRespository.findAllDateTime().get(day - 1).getTime()), ex, tr).size()).type_truck(tr).distance(Precision.round(distance,3)).build());
-//            }
-
             views.add(Excavator.builder()
                     .type(orderByEx.get(0).getExcavator().getName())
                     .driver_name(orderByEx.get(0).getExcavatorDriver().getName())
-                    .weight_fact_avarage(weight_fact/orderByEx.size())
-                    .weight_norm_avarage(weight_norm/orderByEx.size())
+                    .weight_fact_avarage(Precision.round(weight_fact/orderByEx.size(),3))
+                    .weight_norm_avarage(Precision.round(weight_norm/orderByEx.size(),3))
                     .typeofWork(typeOfWork)
-                    .speed(speed/orderByEx.size())
+                    .speed(Precision.round(speed/orderByEx.size(),3))
                     .timeInHours(distance/speed)
                     .trucks(new ArrayList<>(tr_temp))
                     .weight_fact(weight_fact)

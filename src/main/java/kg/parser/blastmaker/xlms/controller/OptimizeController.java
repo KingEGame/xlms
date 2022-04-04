@@ -24,7 +24,7 @@ public class OptimizeController {
     @GetMapping("/calc/optimize")
     String optimizeMonth(Model model){
         output.month();
-        model.addAttribute("month", output.wasteMonth());
+        model.addAttribute("month", output.month());
         return "CalcWaste";
     }
 }
