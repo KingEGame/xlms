@@ -40,7 +40,7 @@ public interface TruckTripsRespository extends JpaRepository<TruckTripsDTO, Long
  @Query(value = "SELECT * FROM trucktrip \n" +
          "inner join truck t on t.id = trucktrip.truck_id\n" +
          "WHERE date(arrival_time) = date(?1) and t.number = ?2 \n" +
-         "order by trip_number", nativeQuery = true)
+         "order by arrival_time", nativeQuery = true)
  List<TruckTripsDTO> findByTimeOfComeLoadingaAndNumSamosval(Timestamp time_of_come_loading2, Integer num_samosval);
 
  @Modifying

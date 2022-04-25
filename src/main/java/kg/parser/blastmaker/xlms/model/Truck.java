@@ -16,6 +16,7 @@ public class Truck {
 
     private int num_truck;
     private int count_reice;
+    private int reverse_reice;
     private double speed;
     private int count_truck;
     private String type_truck;

@@ -97,9 +97,9 @@ public class Output {
     public List<Waste> month(){
         List<Waste> month = new ArrayList<>();
 
-        int days = 30;
+        int days = truckTripsRespository.findAllDateTime().size();
 
-        for(int i = 0; i <= days; i++) {
+        for(int i = 0; i < days; i++) {
             List<Excavator> excavators = new ArrayList<>();
 
             double weight_fact_all = 0;
@@ -149,19 +149,31 @@ public class Output {
 
                     hours = (double) time.getSeconds() / 3600;
 
+                    if(hours > 1.3 && hours <= 0){
+                        System.out.println(ob.getId());
+                        continue;
+                    }
+
                     double speed = ob.getTrip_distance()/hours;
+
+                    if(speed  <= 0){
+                        System.out.println(ob.getId());
+                        continue;
+                    }
+
+
                     double waste_gas = ob.getFuel_at_loading() - ob.getFuel_at_unloading();
 
-                    truck.setCount_reice(truck.getCount_reice()+1);
+
                     truck.setWeight_norm(ob.getTruck().getTruckTypeDTO().getRated_load()+truck.getWeight_norm());
                     truck.setSpeed(speed+truck.getSpeed());
                     truck.setType_of_work(ob.getTypeOfWork().getWork_name());
                     truck.setDistance(ob.getTrip_distance()+truck.getDistance());
                     truck.setWeight(ob.getTruck().getTruckTypeDTO().getWeight());
-                    truck.setSpent_time_in_hour(hours);
-                    truck.setWaste_gas_truck(waste_gas);
-                    truck.setSpecific_waste_with_mass(equation.specific_gas( ob.getFuel_at_loading() -ob.getFuel_at_unloading(), ob.getTruck().getTruckTypeDTO().getWeight(), hours, ob.getTrip_distance()/hours));
-
+                    truck.setSpent_time_in_hour(hours+truck.getSpent_time_in_hour());
+                    truck.setWaste_gas_truck(waste_gas + truck.getWaste_gas_truck());
+                    truck.setSpecific_waste_with_mass(equation.specific_gas( ob.getFuel_at_loading() -ob.getFuel_at_unloading(), ob.getTruck().getTruckTypeDTO().getWeight()+ob.getActual_weight(), hours, ob.getTrip_distance()/hours) + truck.getSpecific_waste_with_mass());
+                    truck.setCount_reice(truck.getCount_reice()+1);
                     truck.setWeight_fact(ob.getActual_weight()+truck.getWeight_fact());
 
                     if(temp == null){
@@ -170,22 +182,25 @@ public class Output {
                     }
 
                     // время потраченно на возвращение
-                    Duration time_come = Duration.between(temp.getBegin_unloading().toInstant(), ob.getBegin_loading().toInstant());
+                    Duration time_come = Duration.between(temp.getBegin_unloading().toInstant(), ob.getArrival_time().toInstant());
                     double hours_come = (double) time_come.getSeconds() / 3600;
+
+
                     double speed_come = temp.getTrip_distance()/hours_come;
-                    if(temp.getFuel_at_unloading() - ob.getFuel_at_loading() > 0 && hours_come > 0 && speed_come > 0) {
+                    if(temp.getFuel_at_unloading() - ob.getFuel_at_loading() > 0 && hours_come > 0 && speed_come > 0  && hours_come <= 1.3) {
                         truck.setSpecific_waste_without_mass(equation.specific_gas(temp.getFuel_at_unloading() - ob.getFuel_at_loading(), ob.getTruck().getTruckTypeDTO().getWeight(), hours_come, speed_come) + truck.getSpecific_waste_without_mass());
+                        truck.setReverse_reice(truck.getReverse_reice()+1);
                     }
                     temp = ob;
                 }
 
+                truck.setSpeed(Precision.round(truck.getSpeed()/truck.getCount_reice(), 9));
+                truck.setSpecific_waste_without_mass(Precision.round(truck.getSpecific_waste_without_mass()/truck.getReverse_reice(),9));
+                truck.setSpecific_waste_with_mass(Precision.round(truck.getSpecific_waste_with_mass()/truck.getCount_reice(),9));
+                truck.setWaste_truck(Precision.round(equation.model_day_waste(truck.getSpeed(), truck.getWeight_fact()/truck.getCount_reice(), excavatorDTO.getVolume()*1.8d, truck.getDistance()/truck.getCount_reice(), truck.getSpecific_waste_with_mass(), truck.getSpecific_waste_without_mass()),9));
 
-                truck.setSpeed(truck.getSpeed()/truck.getCount_reice());
-                truck.setSpecific_waste_without_mass(truck.getSpecific_waste_without_mass()/truckTripsDTOS.size());
-                truck.setSpecific_waste_with_mass(truck.getSpecific_waste_with_mass()/truckTripsDTOS.size());
-                truck.setWaste_truck(equation.model_day_waste(truck.getSpeed(), truck.getTruckTypeDTO().getRated_load()+truck.getTruckTypeDTO().getWeight(), excavatorDTO.getCarrying_capacity_max(), truck.getDistance(), truck.getSpecific_waste_with_mass(), truck.getSpecific_waste_without_mass()));
-                truck.setCost_price(truck.getWaste_truck()/(truck.getDistance()*truck.getWeight_fact()));
-
+                truck.setCost_price(Precision.round(truck.getWaste_truck()/(truck.getDistance()*truck.getWeight_fact()), 5));
+                truck.setCount_truck(1);
                 trucks.add(truck);
             }
 
@@ -201,6 +216,7 @@ public class Output {
                 if(!trucks_temp.contains(truck)){
                     trucks_temp.add(truck);
                 }else {
+
                     trucks_temp.forEach( e -> {
                         if(e.getType_truck().equals(truck.getType_truck())){
                             e.setWaste_truck(truck.getWaste_truck()+e.getWaste_truck());
@@ -228,9 +244,9 @@ public class Output {
                 weight_norm_all += truck.getWeight_norm();
                 distance += truck.getDistance();
 
-                truck.setWaste_truck(truck.getWaste_truck()/truck.getCount_truck());
-                truck.setCost_price(truck.getCost_price()/truck.getCount_truck());
-                truck.setSpeed(truck.getSpeed()/truck.getCount_truck());
+                truck.setWaste_truck(Precision.round(truck.getWaste_truck()/truck.getCount_truck(),5));
+                truck.setCost_price(Precision.round(truck.getCost_price()/truck.getCount_truck(), 5));
+                truck.setSpeed(Precision.round(truck.getSpeed()/truck.getCount_truck(),5));
 
             }
 
