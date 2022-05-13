@@ -149,11 +149,6 @@ public class Output {
 
                     hours = (double) time.getSeconds() / 3600;
 
-                    if(hours > 1.3 && hours <= 0){
-                        System.out.println(ob.getId());
-                        continue;
-                    }
-
                     double speed = ob.getTrip_distance()/hours;
 
                     if(speed  <= 0){
@@ -187,7 +182,7 @@ public class Output {
 
 
                     double speed_come = temp.getTrip_distance()/hours_come;
-                    if(temp.getFuel_at_unloading() - ob.getFuel_at_loading() > 0 && hours_come > 0 && speed_come > 0  && hours_come <= 1.3) {
+                    if(temp.getFuel_at_unloading() - ob.getFuel_at_loading() > 0 && hours_come > 0 && speed_come > 0) {
                         truck.setSpecific_waste_without_mass(equation.specific_gas(temp.getFuel_at_unloading() - ob.getFuel_at_loading(), ob.getTruck().getTruckTypeDTO().getWeight(), hours_come, speed_come) + truck.getSpecific_waste_without_mass());
                         truck.setReverse_reice(truck.getReverse_reice()+1);
                     }
